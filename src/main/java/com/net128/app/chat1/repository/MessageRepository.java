@@ -5,9 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
-public interface MessageRepository extends JpaRepository<Message, UUID>{
+public interface MessageRepository extends JpaRepository<Message, String>{
     List<Message> findBySenderIdOrRecipientIdAndSentAfterOrderBySentDesc(String senderId, String recipientId, LocalDateTime sent);
     default List<Message> findByUserId(String userId) {
         return findBySenderIdOrRecipientIdAndSentAfterOrderBySentDesc(userId, userId,
