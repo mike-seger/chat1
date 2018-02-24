@@ -16,17 +16,17 @@ public class Message {
     public LocalDateTime sent;
     public LocalDateTime read;
     @NotNull
-    public String sender;
+    public String senderId;
     @NotNull
-    public String recipient;
+    public String recipientId;
     public String message;
     public String mimeType;
     public byte [] data;
 
     public Message(){}
-    public Message(String sender, String recipient, String message) {
-        this.sender = sender;
-        this.recipient = recipient;
+    public Message(String sender, String recipientId, String message) {
+        this.senderId = senderId;
+        this.recipientId = recipientId;
         this.message = message;
     }
 
