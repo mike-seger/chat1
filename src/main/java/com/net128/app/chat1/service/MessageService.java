@@ -12,11 +12,11 @@ public class MessageService {
     @Inject
     private MessageRepository repository;
 
-    public List<Message> find(String user) {
-        return repository.findAll();
+    public List<Message> findUserMessages(String userId) {
+        return repository.findByUserId(userId);
     }
 
-    public void save(Message message) {
-        repository.save(message);
+    public Message save(Message message) {
+        return repository.save(message);
     }
 }

@@ -10,21 +10,28 @@ import java.util.UUID;
 @Entity
 public class Message {
     @Id
-    @JsonProperty(value="_id", access= JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access= JsonProperty.Access.READ_ONLY)
     public String id;
+
     @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public LocalDateTime sent;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public LocalDateTime read;
+
     @NotNull
     public String senderId;
+
     @NotNull
     public String recipientId;
+
     public String message;
     public String mimeType;
     public byte [] data;
 
     public Message(){}
-    public Message(String sender, String recipientId, String message) {
+    public Message(String senderId, String recipientId, String message) {
         this.senderId = senderId;
         this.recipientId = recipientId;
         this.message = message;
