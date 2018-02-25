@@ -1,15 +1,16 @@
 package com.net128.app.chat1.controller;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
-
 import com.net128.app.chat1.model.Message;
 import com.net128.app.chat1.model.MessageWithData;
 import com.net128.app.chat1.service.MessageService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 @RestController
@@ -26,18 +27,45 @@ public class MessageController {
         service.save(new MessageWithData("TestUserID A", "TestUserID C", "Hello"));
     }
 
-    @RequestMapping(value="/usermessage/{userid}", method=GET)
+    @GetMapping(value="/usermessage/{userid}")
     public List<Message> userMessages(@PathVariable("userid") String userId ){
         return service.findUserMessages(userId);
     }
 
-    @RequestMapping(value="/findall", method=GET)
+    @GetMapping(value="/findall")
     public List<MessageWithData> findAll() {
         return service.findAllMessages();
     }
 
-    @RequestMapping(value="/save", method=POST)
+    @PostMapping(value="/save")
     public Message save(MessageWithData message) {
         return service.save(message);
+    }
+
+    @PostMapping("/upload")
+    public Message upload(
+            @RequestParam("senderId") String senderId,
+            @RequestParam("recipientId") String recipientId,
+            @RequestParam("text") String text,
+            @RequestParam("data") MultipartFile data) throws IOException {
+        return service.saveData(new Message(senderId, recipientId, text), data.getInputStream());
+    }
+
+    @PutMapping(value = "/data/{messageId}")
+    public Message putData(
+            @PathVariable("messageId") String messageId,
+            HttpServletRequest request) throws IOException {
+        Message message = service.getMessage(messageId);
+        return service.saveData(message, request.getInputStream());
+    }
+
+    @GetMapping(value = "/data/{messageId}")
+    public void getData(
+            @PathVariable("messageId") String messageId,
+            HttpServletResponse response,
+            OutputStream stream) throws IOException {
+        Message message = service.getMessage(messageId);
+        response.setContentType(message.mimeType);
+        service.loadData(messageId, stream);
     }
 }

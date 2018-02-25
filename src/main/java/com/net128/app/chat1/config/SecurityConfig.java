@@ -12,14 +12,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/home").permitAll()
-                .antMatchers("/admin", "/h2_console/**").hasRole("ADMIN").anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic()
-                //.formLogin().loginPage("/login").permitAll()
-                .and()
-                .logout().permitAll();
+            .antMatchers("/", "/home").permitAll()
+            .antMatchers("/admin", "/h2_console/**").hasRole("ADMIN").anyRequest()
+            .authenticated()
+            .and()
+            .httpBasic()
+            //.formLogin().loginPage("/login").permitAll()
+            .and()
+            .logout().permitAll();
         http.exceptionHandling().accessDeniedPage("/403");
         http.csrf().disable();
         http.headers().frameOptions().disable();
@@ -28,8 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Inject
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user").password("user").roles("USER")
-                .and()
-                .withUser("admin").password("admin").roles("ADMIN");
+            .withUser("user").password("user").roles("USER")
+            .and()
+            .withUser("admin").password("admin").roles("ADMIN");
     }
 }

@@ -43,6 +43,13 @@ public class MessageBase {
     @Size(min = 3, max = 129)
     public String mimeType;
 
+    public MessageBase() {}
+    public MessageBase(String senderId, String recipientId, String text) {
+        this.senderId = senderId;
+        this.recipientId = recipientId;
+        this.text = text;
+    }
+
     @PostLoad
     private void postLoad() {
         if(read==null) {
