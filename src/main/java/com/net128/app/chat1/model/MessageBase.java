@@ -16,32 +16,32 @@ public class MessageBase {
     @JsonProperty(access = READ_ONLY)
     @Column(length = 36)
     @Size(max = 36)
-    public String id;
+    private String id;
 
     @JsonProperty(access = READ_ONLY)
     @Column(nullable = false)
-    public LocalDateTime sent;
+    private LocalDateTime sent;
 
     @JsonProperty(access = READ_ONLY)
-    public LocalDateTime read;
+    private LocalDateTime read;
 
     @NotNull
     @Column(length = 256, nullable = false)
     @Size(max = 256)
-    public String senderId;
+    private String senderId;
 
     @NotNull
     @Column(length = 256, nullable = false)
     @Size(max = 256)
-    public String recipientId;
+    private String recipientId;
 
     @Column(length = 4000)
     @Size(max = 4000)
-    public String text;
+    private String text;
 
     @Column(length = 129)
     @Size(min = 3, max = 129)
-    public String mimeType;
+    private String mimeType;
 
     public MessageBase() {}
     public MessageBase(String senderId, String recipientId, String text) {
@@ -61,5 +61,61 @@ public class MessageBase {
     private void prePersist() {
         id = UUID.randomUUID().toString();
         sent=LocalDateTime.now();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getSent() {
+        return sent;
+    }
+
+    public void setSent(LocalDateTime sent) {
+        this.sent = sent;
+    }
+
+    public LocalDateTime getRead() {
+        return read;
+    }
+
+    public void setRead(LocalDateTime read) {
+        this.read = read;
+    }
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
+    public String getRecipientId() {
+        return recipientId;
+    }
+
+    public void setRecipientId(String recipientId) {
+        this.recipientId = recipientId;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 }

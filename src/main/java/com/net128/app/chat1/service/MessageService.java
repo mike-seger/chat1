@@ -38,37 +38,38 @@ public class MessageService {
     @Transactional(readOnly = true)
     public Message getMessage(String messageId) {
         Message message = repository.getOne(messageId);
-        System.out.println(message.id);
         return message;
     }
 
     @Transactional
-    public Message save(MessageWithData message) {
-        MessageWithData messageWithData = repositoryWithData.save(message);
-        return getMessage(messageWithData.id);
-    }
-
-    @Transactional
-    public Message save(String messageId, InputStream inputStream) throws IOException {
-        MessageWithData message = repositoryWithData.getOne(messageId);
-        message.data = IOUtils.toByteArray(inputStream);
+    public Message create(MessageWithData message) {
         repositoryWithData.save(message);
-        return getMessage(messageId);
+        repositoryWithData.flush();
+        return getMessage(message.getId());
+
     }
 
     @Transactional
-    public Message save(String senderId, String recipientId, String text, InputStream inputStream) throws IOException {
-        MessageWithData messageWithData = new MessageWithData(senderId, recipientId, text);
-        messageWithData.data = IOUtils.toByteArray(inputStream);
-        messageWithData=repositoryWithData.save(messageWithData);
-        return repository.getOne(messageWithData.id);
+    public Message create(String senderId, String recipientId, String text, InputStream inputStream) throws IOException {
+        MessageWithData message = new MessageWithData(senderId, recipientId, text);
+        message.setData(IOUtils.toByteArray(inputStream));
+        repositoryWithData.save(message);
+        repositoryWithData.flush();
+        return getMessage(message.getId());
+    }
+
+    @Transactional
+    public void attachData(String messageId, byte [] data) throws IOException {
+        MessageWithData message = repositoryWithData.getOne(messageId);
+        message.setData(data);
+        repositoryWithData.save(message);
     }
 
     @Transactional(readOnly = true)
-    public void loadData(String messageId, OutputStream outputStream) throws IOException {
+    public void streamData(String messageId, OutputStream outputStream) throws IOException {
         MessageWithData message=repositoryWithData.getOne(messageId);
-        if(message.data!=null) {
-            try (InputStream is = new ByteArrayInputStream(message.data)) {
+        if(message.getData()!=null) {
+            try (InputStream is = new ByteArrayInputStream(message.getData())) {
                 IOUtils.copy(is, outputStream);
             }
         }

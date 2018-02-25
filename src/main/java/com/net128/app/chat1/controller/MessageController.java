@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,11 +19,11 @@ public class MessageController {
 
     @RequestMapping("/generate")
     public void generate(){
-        service.save(new MessageWithData("TestUserID A", "TestUserID C", "Hello"));
-        service.save(new MessageWithData("TestUserID B", "TestUserID A", "Hello"));
-        service.save(new MessageWithData("TestUserID C", "TestUserID D", "Hello"));
-        service.save(new MessageWithData("TestUserID D", "TestUserID B", "Hello"));
-        service.save(new MessageWithData("TestUserID A", "TestUserID C", "Hello"));
+        service.create(new MessageWithData("TestUserID A", "TestUserID C", "Hello"));
+        service.create(new MessageWithData("TestUserID B", "TestUserID A", "Hello"));
+        service.create(new MessageWithData("TestUserID C", "TestUserID D", "Hello"));
+        service.create(new MessageWithData("TestUserID D", "TestUserID B", "Hello"));
+        service.create(new MessageWithData("TestUserID A", "TestUserID C", "Hello"));
     }
 
     @GetMapping(value="/for-user/{userid}")
@@ -37,9 +36,9 @@ public class MessageController {
         return service.findAllMessages();
     }
 
-    @PostMapping(value="/save")
-    public Message save(@RequestBody MessageWithData message) {
-        return service.save(message);
+    @PostMapping(value="/create")
+    public Message create(@RequestBody MessageWithData message) {
+        return service.create(message);
     }
 
     @PostMapping("/upload")
@@ -48,14 +47,14 @@ public class MessageController {
             @RequestParam("recipientId") String recipientId,
             @RequestParam("text") String text,
             @RequestParam("file") MultipartFile file) throws IOException {
-        return service.save(senderId, recipientId, text, file.getInputStream());
+        return service.create(senderId, recipientId, text, file.getInputStream());
     }
 
     @PutMapping(value = "/data/{messageId}")
-    public Message putData(
+    public void putData(
             @PathVariable("messageId") String messageId,
-            HttpServletRequest request) throws IOException {
-        return service.save(messageId, request.getInputStream());
+            @RequestBody byte [] data) throws IOException {
+        service.attachData(messageId, data);
     }
 
     @GetMapping(value = "/data/{messageId}")
@@ -64,7 +63,7 @@ public class MessageController {
             HttpServletResponse response,
             OutputStream stream) throws IOException {
         Message message = service.getMessage(messageId);
-        response.setContentType(message.mimeType);
-        service.loadData(messageId, stream);
+        response.setContentType(message.getMimeType());
+        service.streamData(messageId, stream);
     }
 }

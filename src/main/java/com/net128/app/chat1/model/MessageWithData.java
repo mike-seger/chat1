@@ -13,13 +13,19 @@ import java.sql.Blob;
 @Table(name = "Message")
 public class MessageWithData extends MessageBase {
     @Lob
-    public byte [] data;
+    private byte [] data;
 
     public MessageWithData(){}
 
     public MessageWithData(String senderId, String recipientId, String text) {
-        this.senderId = senderId;
-        this.recipientId = recipientId;
-        this.text = text;
+        super(senderId, recipientId, text);
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 }
