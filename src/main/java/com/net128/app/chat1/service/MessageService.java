@@ -46,7 +46,6 @@ public class MessageService {
         repositoryWithData.save(message);
         repositoryWithData.flush();
         return getMessage(message.getId());
-
     }
 
     @Transactional
