@@ -13,11 +13,6 @@ import java.sql.Blob;
 @Table(name = "Message")
 public class MessageWithData extends MessageBase {
     @Lob
-    @JsonIgnore
-    public Blob blob;
-
-    @Transient
-    @JsonProperty
     public byte [] data;
 
     public MessageWithData(){}

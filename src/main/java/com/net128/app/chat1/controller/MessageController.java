@@ -27,18 +27,18 @@ public class MessageController {
         service.save(new MessageWithData("TestUserID A", "TestUserID C", "Hello"));
     }
 
-    @GetMapping(value="/usermessage/{userid}")
-    public List<Message> userMessages(@PathVariable("userid") String userId ){
+    @GetMapping(value="/for-user/{userid}")
+    public List<Message> forUser(@PathVariable("userid") String userId ){
         return service.findUserMessages(userId);
     }
 
-    @GetMapping(value="/findall")
+    @GetMapping(value="/find-all")
     public List<MessageWithData> findAll() {
         return service.findAllMessages();
     }
 
     @PostMapping(value="/save")
-    public Message save(MessageWithData message) {
+    public Message save(@RequestBody MessageWithData message) {
         return service.save(message);
     }
 
@@ -47,16 +47,15 @@ public class MessageController {
             @RequestParam("senderId") String senderId,
             @RequestParam("recipientId") String recipientId,
             @RequestParam("text") String text,
-            @RequestParam("data") MultipartFile data) throws IOException {
-        return service.saveData(new Message(senderId, recipientId, text), data.getInputStream());
+            @RequestParam("file") MultipartFile file) throws IOException {
+        return service.save(senderId, recipientId, text, file.getInputStream());
     }
 
     @PutMapping(value = "/data/{messageId}")
     public Message putData(
             @PathVariable("messageId") String messageId,
             HttpServletRequest request) throws IOException {
-        Message message = service.getMessage(messageId);
-        return service.saveData(message, request.getInputStream());
+        return service.save(messageId, request.getInputStream());
     }
 
     @GetMapping(value = "/data/{messageId}")
