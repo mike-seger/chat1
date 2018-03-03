@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "Message")
 public class Message extends MessageBase {
     public Message(){}
-    public Message(String senderId, String recipientId, String text) {
-        super(senderId, recipientId, text);
+    public Message(String senderId, String recipientId, RichText richText) {
+        super(senderId, recipientId, richText);
     }
 }

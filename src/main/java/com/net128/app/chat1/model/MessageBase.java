@@ -1,5 +1,6 @@
 package com.net128.app.chat1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -12,16 +13,19 @@ import java.util.UUID;
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
 @MappedSuperclass
-public class MessageBase {
+public abstract class MessageBase implements JsonObject {
     @Id
     @JsonProperty(access = READ_ONLY)
-    @Column(length = 36)
-    @Size(max = 36)
+    @Column(length = 32)
+    @Size(max = 32)
     private String id;
 
     @JsonProperty(access = READ_ONLY)
     @Column(nullable = false)
     private LocalDateTime sent;
+
+    @JsonProperty(access = READ_ONLY)
+    private LocalDateTime delivered;
 
     @JsonProperty(access = READ_ONLY)
     private LocalDateTime read;
@@ -36,6 +40,8 @@ public class MessageBase {
     @Size(max = 256)
     private String recipientId;
 
+    @NotNull
+    @JsonIgnore
     @Column(length = 4000)
     @Size(max = 4000)
     private String text;
@@ -44,24 +50,49 @@ public class MessageBase {
     @Size(min = 3, max = 129)
     private String mimeType;
 
+    @Transient
+    private RichText richText;
+
     public MessageBase() {}
-    public MessageBase(String senderId, String recipientId, String text) {
+    public MessageBase(String senderId, String recipientId, RichText richText) {
         this.senderId = senderId;
         this.recipientId = recipientId;
-        this.text = text;
+        this.richText = richText;
     }
 
     @PostLoad
     private void postLoad() {
-        if(read==null) {
-            read=LocalDateTime.now();
+        if(delivered ==null) {
+            delivered = LocalDateTime.now();
         }
+        richText = unmarshalMessageText(text);
     }
 
     @PrePersist
     private void prePersist() {
-        id = UUID.randomUUID().toString();
+        id = UUID.randomUUID().toString().replace("-", "");
         sent = LocalDateTime.now();
+        text = marshalMessageText(richText);
+    }
+
+    @PreUpdate
+    private void preUpdate() {
+        text = marshalMessageText(richText);
+    }
+
+    private String marshalMessageText(RichText richText) {
+        if(richText==null) {
+            richText = new RichText();
+        }
+        return  richText.toJson();
+    }
+
+    private RichText unmarshalMessageText(String json) {
+        RichText richText = new RichText();
+        if(json!=null) {
+            richText.fromJson(json);
+        }
+        return richText;
     }
 
     public String getId() {
@@ -78,6 +109,14 @@ public class MessageBase {
 
     public void setSent(LocalDateTime sent) {
         this.sent = sent;
+    }
+
+    public LocalDateTime getDelivered() {
+        return delivered;
+    }
+
+    public void setDelivered(LocalDateTime delivered) {
+        this.delivered = delivered;
     }
 
     public LocalDateTime getRead() {
@@ -120,6 +159,14 @@ public class MessageBase {
         this.mimeType = mimeType;
     }
 
+    public RichText getRichText() {
+        return richText;
+    }
+
+    public void setRichText(RichText richText) {
+        this.richText = richText;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -131,5 +178,9 @@ public class MessageBase {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    public String toString() {
+        return toJson();
     }
 }

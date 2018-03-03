@@ -1,6 +1,7 @@
 package com.net128.app.chat1.service;
 
 import com.net128.app.chat1.model.Message;
+import com.net128.app.chat1.model.RichText;
 import com.net128.app.chat1.model.MessageWithData;
 import com.net128.app.chat1.repository.MessageRepository;
 import com.net128.app.chat1.repository.MessageWithDataRepository;
@@ -49,8 +50,8 @@ public class MessageService {
     }
 
     @Transactional
-    public Message create(String senderId, String recipientId, String text, InputStream inputStream) throws IOException {
-        MessageWithData message = new MessageWithData(senderId, recipientId, text);
+    public Message create(String senderId, String recipientId, RichText messageText, InputStream inputStream) throws IOException {
+        MessageWithData message = new MessageWithData(senderId, recipientId, messageText);
         message.setData(IOUtils.toByteArray(inputStream));
         repositoryWithData.save(message);
         repositoryWithData.flush();

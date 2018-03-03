@@ -12,7 +12,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/", "/home").permitAll()
+            .antMatchers("/", "/home", "swagger-ui.html").permitAll()
             .antMatchers("/admin", "/h2_console/**").hasRole("ADMIN").anyRequest()
             .authenticated()
             .and()
