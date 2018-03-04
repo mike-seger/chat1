@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
@@ -60,12 +61,14 @@ public class MessageService {
         return getMessage(message.getId());
     }
 
-    public Message create(String senderId, String recipientId, Content messageText, InputStream inputStream) throws IOException {
+    public Message create(String senderId, String recipientId, Content messageText, MultipartFile file) throws IOException {
         Message message = new Message(senderId, recipientId, messageText);
         repository.save(message);
         repository.flush();
-        attachData(message, IOUtils.toByteArray(inputStream));
-        return message;
+        try (InputStream is=file.getInputStream()) {
+            attachData(message, IOUtils.toByteArray(is));
+            return message;
+        }
     }
 
     public void attachData(String messageId, byte [] data) {

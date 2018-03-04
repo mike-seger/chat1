@@ -30,9 +30,9 @@ public class MessageController {
     public Message upload(
             @RequestParam("senderId") String senderId,
             @RequestParam("recipientId") String recipientId,
-            @RequestParam("text") Content messageText,
+            @RequestParam("text") String messageText,
             @RequestParam("file") MultipartFile file) throws IOException {
-        return service.create(senderId, recipientId, messageText, file.getInputStream());
+        return service.create(senderId, recipientId, new Content(messageText), file);
     }
 
     @GetMapping(value = "/messages/{messageId}/data")
