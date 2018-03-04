@@ -44,13 +44,12 @@ public class MessageControllerTest {
         given(service.findUserMessages(null, null, null))
             .willReturn(Arrays.asList(
                     new Message("user1", "user2", new Content("content1")),
-                    new Message("user2", "user3", new Content("content2")),
-
+                    new Message("user2", "user3", new Content("content2"))
             ));
 
         mvc.perform(get("/messages")).andExpect(status().isOk())
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$", hasSize(3)))
+            .andExpect(jsonPath("$", hasSize(2)))
             .andExpect(jsonPath("$[0].senderId", is("user1")))
             .andExpect(jsonPath("$[0].recipientId", is("user2")))
             .andExpect(jsonPath("$[0].content.text", is("content1")))
