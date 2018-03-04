@@ -1,0 +1,1 @@
+wkhtmltoimage --width 2048 --encoding utf-8 --custom-header 'meta' 'charset=utf-8' in.html out.png

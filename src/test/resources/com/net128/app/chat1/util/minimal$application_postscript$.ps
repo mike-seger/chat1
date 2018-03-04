@@ -1,0 +1,1038 @@
+%!PS-Adobe-3.0
+%%Title: minimal$text_plain$.txt
+%%Creator: paps version 0.6.7 by Dov Grobgeld
+%%Pages: (atend)
+%%BoundingBox: 0 0 595 841
+%%BeginProlog
+%%Orientation: Portrait
+/papsdict 1 dict def
+papsdict begin
+
+/inch {72 mul} bind def
+/mm {1 inch 25.4 div mul} bind def
+
+% override setpagedevice if it is not defined
+/setpagedevice where {
+    pop % get rid of its dictionary
+    /setpagesize { 
+       3 dict begin
+         /pageheight exch def 
+         /pagewidth exch def
+         /orientation 0 def
+         % Exchange pagewidth and pageheight so that pagewidth is bigger
+         pagewidth pageheight gt {  
+             pagewidth
+             /pagewidth pageheight def
+             /pageheight exch def
+             /orientation 3 def
+         } if
+         2 dict
+         dup /PageSize [pagewidth pageheight] put
+         dup /Orientation orientation put
+         setpagedevice 
+       end
+    } def
+}
+{
+    /setpagesize { pop pop } def
+} ifelse
+/duplex {
+    statusdict /setduplexmode known 
+    { statusdict begin setduplexmode end } {pop} ifelse
+} def
+/tumble {
+    statusdict /settumble known
+   { statusdict begin settumble end } {pop} ifelse
+} def
+% Turn the page around
+/turnpage {
+  90 rotate
+  0 pageheight neg translate
+} def
+% User settings
+/pagewidth 595 def
+/pageheight 841 def
+pagewidth pageheight setpagesize
+/column_width 523 def
+/bodyheight 769 def
+/lmarg 36 def
+/ytop 805 def
+/do_separation_line true def
+/do_landscape false def
+/do_tumble true def
+/do_duplex true def
+% Procedures to translate position to first and second column
+/lw 20 def % whatever
+/setnumcolumns {
+    /numcolumns exch def
+    /firstcolumn { /xpos lmarg def /ypos ytop def} def
+    /nextcolumn { 
+      do_separation_line {
+          xpos column_width add gutter_width 2 div add % x start
+           ytop lw add moveto              % y start
+          0 bodyheight lw add neg rlineto 0 setlinewidth stroke
+      } if
+      /xpos xpos column_width add gutter_width add def 
+      /ypos ytop def
+    } def
+} def
+
+1 setnumcolumns
+/showline {
+    /y exch def
+    /s exch def
+    xpos y moveto 
+    column_width 0 rlineto stroke
+    xpos y moveto /Helvetica findfont 20 scalefont setfont s show
+} def
+/paps_bop {  % Beginning of page definitions
+    papsdict begin
+    gsave
+    do_landscape {turnpage} if 
+    % ps2pdf gets wrong orientation without this!
+    /Helvetica findfont setfont 100 100 moveto ( ) show
+    firstcolumn
+    end
+} def
+
+/paps_eop {  % End of page cleanups
+    grestore    
+} def
+%%BeginProlog
+/papsdict 1 dict def
+papsdict begin
+
+/conicto {
+    /to_y exch def
+    /to_x exch def
+    /conic_cntrl_y exch def
+    /conic_cntrl_x exch def
+    currentpoint
+    /p0_y exch def
+    /p0_x exch def
+    /p1_x p0_x conic_cntrl_x p0_x sub 2 3 div mul add def
+    /p1_y p0_y conic_cntrl_y p0_y sub 2 3 div mul add def
+    /p2_x p1_x to_x p0_x sub 1 3 div mul add def
+    /p2_y p1_y to_y p0_y sub 1 3 div mul add def
+    p1_x p1_y p2_x p2_y to_x to_y curveto
+} bind def
+/start_ol { gsave } bind def
+/end_ol { closepath fill grestore } bind def
+/draw_char { fontdict begin gsave 0.001000 dup scale last_x last_y translate load exec end grestore} def
+/goto_xy { fontdict begin /last_y exch def /last_x exch def end } def
+/goto_x { fontdict begin /last_x exch def end } def
+/fwd_x { fontdict begin /last_x exch last_x add def end } def
+/c /curveto load def
+/x /conicto load def
+/l /lineto load def
+/m /moveto load def
+end
+/paps_exec {
+  1 dict begin
+  /ps exch def
+  /len ps length def
+  /pos 0 def
+
+  % Loop over all the characters of the string
+  {
+    pos len eq {exit} if
+
+    % Get character at pos
+    /ch ps pos 1 getinterval def
+    
+    % check for +
+    (+) ch eq {
+      /pos 1 pos add def
+      /xp ps pos 8 getinterval cvi def
+      /yp ps pos 8 add 8 getinterval cvi def
+      /pos 16 pos add def
+      papsdict begin xp yp goto_xy end
+    } {
+      (*) ch eq {
+        /pos 1 pos add def
+        /xp ps pos 8 getinterval cvi def
+        /pos 8 pos add def
+        papsdict begin xp goto_x end
+      } { (>) ch eq {
+          /pos 1 pos add def
+          /xp ps pos 4 getinterval cvi def
+          /pos 4 pos add def
+          papsdict begin xp 2 mul fwd_x end
+        } { (-) ch eq {
+            /pos 1 pos add def
+            /xp ps pos 4 getinterval cvi def
+            /pos 4 pos add def
+            papsdict begin xp neg 2 mul fwd_x end
+          } {
+              % Must be a 3 char sym. Load and exec
+              /name ps pos 3 getinterval def
+              papsdict begin name draw_char end
+              /pos 3 pos add def
+            } ifelse
+          } ifelse
+        } ifelse
+    } ifelse
+  } loop
+  end
+} def
+/fontdict 1 dict def
+papsdict begin fontdict begin
+/AAA { start_ol
+1152 8784 m
+6336 8784 l
+6336 7776 l
+2376 7776 l
+2376 5184 l
+6192 5184 l
+6192 4176 l
+2376 4176 l
+2376 1008 l
+6480 1008 l
+6480 0 l
+1152 0 l
+1152 8784 l
+7272 fwd_x
+end_ol
+ } def
+/BAA { start_ol
+6192 4050 m
+6192 0 l
+5112 0 l
+5112 4050 l
+5112 4930 4798 5344 x
+4485 5760 3817 5760 x
+3054 5760 2642 5225 x
+2232 4692 2232 3694 x
+2232 0 l
+1152 0 l
+1152 6552 l
+2232 6552 l
+2232 5555 l
+2521 6116 3016 6405 x
+3511 6696 4188 6696 x
+5196 6696 5693 6039 x
+6192 5382 6192 4050 x
+7272 fwd_x
+end_ol
+ } def
+/CAA { start_ol
+5040 3281 m
+5040 4497 4644 5128 x
+4249 5760 3494 5760 x
+2703 5760 2287 5128 x
+1872 4497 1872 3281 x
+1872 2066 2290 1428 x
+2709 792 3505 792 x
+4249 792 4644 1432 x
+5040 2072 5040 3281 x
+6120 380 m
+6120 -1047 5418 -1783 x
+4717 -2520 3355 -2520 x
+2908 -2520 2418 -2446 x
+1929 -2373 1440 -2232 x
+1440 -1152 l
+2018 -1409 2489 -1532 x
+2962 -1656 3358 -1656 x
+4237 -1656 4638 -1204 x
+5040 -753 5040 227 x
+5040 273 l
+5040 985 l
+4781 451 4334 189 x
+3888 -72 3247 -72 x
+2095 -72 1407 848 x
+720 1768 720 3308 x
+720 4855 1407 5775 x
+2095 6696 3247 6696 x
+3882 6696 4322 6438 x
+4763 6181 5040 5643 x
+5040 6552 l
+6120 6552 l
+6120 380 l
+7272 fwd_x
+end_ol
+ } def
+/DAA { start_ol
+3744 2327 m
+3744 1602 4009 1233 x
+4275 864 4793 864 x
+6048 864 l
+6048 0 l
+4689 0 l
+3723 0 3193 607 x
+2664 1215 2664 2327 x
+2664 8280 l
+504 8280 l
+504 9144 l
+3744 9144 l
+3744 2327 l
+7272 fwd_x
+end_ol
+ } def
+/EAA { start_ol
+1512 6552 m
+4248 6552 l
+4248 864 l
+6408 864 l
+6408 0 l
+1008 0 l
+1008 864 l
+3168 864 l
+3168 5688 l
+1512 5688 l
+1512 6552 l
+3168 9144 m
+4248 9144 l
+4248 7776 l
+3168 7776 l
+3168 9144 l
+7272 fwd_x
+end_ol
+ } def
+/FAA { start_ol
+5688 6264 m
+5688 5184 l
+5229 5472 4764 5616 x
+4299 5760 3817 5760 x
+3090 5760 2732 5526 x
+2376 5293 2376 4813 x
+2376 4381 2646 4168 x
+2917 3954 3992 3753 x
+4426 3675 l
+5225 3524 5636 3073 x
+6048 2622 6048 1899 x
+6048 938 5361 397 x
+4675 -144 3453 -144 x
+2971 -144 2441 -36 x
+1912 72 1296 288 x
+1296 1440 l
+1895 1116 2442 954 x
+2989 792 3478 792 x
+4188 792 4577 1075 x
+4968 1360 4968 1870 x
+4968 2605 3528 2886 x
+3480 2898 l
+3075 2976 l
+2147 3156 1721 3583 x
+1296 4009 1296 4746 x
+1296 5680 1929 6187 x
+2562 6696 3736 6696 x
+4259 6696 4740 6588 x
+5223 6480 5688 6264 x
+7272 fwd_x
+end_ol
+ } def
+/GAA { start_ol
+6192 4050 m
+6192 0 l
+5112 0 l
+5112 4050 l
+5112 4930 4798 5344 x
+4485 5760 3817 5760 x
+3054 5760 2642 5225 x
+2232 4692 2232 3694 x
+2232 0 l
+1152 0 l
+1152 9144 l
+2232 9144 l
+2232 5555 l
+2521 6116 3016 6405 x
+3511 6696 4188 6696 x
+5196 6696 5693 6039 x
+6192 5382 6192 4050 x
+7272 fwd_x
+end_ol
+ } def
+/HAA { start_ol
+2880 6192 m
+4392 6192 l
+4392 4392 l
+2880 4392 l
+2880 6192 l
+2880 1800 m
+4392 1800 l
+4392 0 l
+2880 0 l
+2880 1800 l
+7272 fwd_x
+end_ol
+ } def
+/IAA { start_ol
+792 8784 m
+2016 8784 l
+2016 5184 l
+5184 5184 l
+5184 8784 l
+6408 8784 l
+6408 0 l
+5184 0 l
+5184 4176 l
+2016 4176 l
+2016 0 l
+792 0 l
+792 8784 l
+7272 fwd_x
+end_ol
+ } def
+/JAA { start_ol
+6552 3564 m
+6552 3024 l
+1831 3024 l
+1831 2989 l
+1831 1939 2392 1365 x
+2954 792 3976 792 x
+4494 792 5058 951 x
+5622 1112 6264 1440 x
+6264 360 l
+5648 108 5077 -18 x
+4505 -144 3972 -144 x
+2443 -144 1581 766 x
+720 1676 720 3276 x
+720 4835 1569 5765 x
+2418 6696 3834 6696 x
+5095 6696 5823 5856 x
+6552 5017 6552 3564 x
+5472 3888 m
+5448 4803 5017 5281 x
+4586 5760 3778 5760 x
+2989 5760 2477 5261 x
+1966 4764 1872 3882 x
+5472 3888 l
+7272 fwd_x
+end_ol
+ } def
+/KAA { start_ol
+3596 5760 m
+2782 5760 2362 5133 x
+1944 4506 1944 3276 x
+1944 2050 2362 1420 x
+2782 792 3596 792 x
+4417 792 4836 1420 x
+5256 2050 5256 3276 x
+5256 4506 4836 5133 x
+4417 5760 3596 5760 x
+3596 6696 m
+4961 6696 5684 5817 x
+6408 4939 6408 3276 x
+6408 1606 5686 731 x
+4966 -144 3596 -144 x
+2233 -144 1512 731 x
+792 1606 792 3276 x
+792 4939 1512 5817 x
+2233 6696 3596 6696 x
+7272 fwd_x
+end_ol
+ } def
+/LAA { start_ol
+4493 4192 m
+4943 4073 5260 3741 x
+5577 3411 6051 2421 x
+7272 0 l
+5970 0 l
+4946 2236 l
+4498 3191 4141 3467 x
+3784 3744 3209 3744 x
+2088 3744 l
+2088 0 l
+864 0 l
+864 8784 l
+3325 8784 l
+4748 8784 5505 8137 x
+6264 7490 6264 6267 x
+6264 5404 5799 4860 x
+5335 4315 4493 4192 x
+2088 7776 m
+2088 4752 l
+3372 4752 l
+4215 4752 4627 5122 x
+5040 5493 5040 6258 x
+5040 6994 4601 7384 x
+4162 7776 3325 7776 x
+2088 7776 l
+7272 fwd_x
+end_ol
+ } def
+/MAA { start_ol
+1152 2502 m
+1152 6552 l
+2232 6552 l
+2232 2502 l
+2232 1621 2548 1206 x
+2864 792 3526 792 x
+4296 792 4703 1325 x
+5112 1859 5112 2857 x
+5112 6552 l
+6192 6552 l
+6192 0 l
+5112 0 l
+5112 1008 l
+4822 441 4323 148 x
+3825 -144 3159 -144 x
+2143 -144 1647 513 x
+1152 1170 1152 2502 x
+7272 fwd_x
+end_ol
+ } def
+/NAA { start_ol
+4161 3312 m
+3798 3312 l
+2840 3312 2355 2986 x
+1872 2661 1872 2017 x
+1872 1436 2234 1113 x
+2597 792 3240 792 x
+4143 792 4660 1398 x
+5178 2005 5184 3075 x
+5184 3312 l
+4161 3312 l
+6264 3767 m
+6264 0 l
+5184 0 l
+5184 1028 l
+4834 427 4303 141 x
+3773 -144 3015 -144 x
+2001 -144 1396 421 x
+792 988 792 1939 x
+792 3037 1534 3606 x
+2277 4176 3714 4176 x
+5184 4176 l
+5184 4329 l
+5178 5080 4782 5420 x
+4387 5760 3520 5760 x
+2965 5760 2398 5594 x
+1832 5430 1296 5112 x
+1296 6192 l
+1896 6444 2446 6570 x
+2997 6696 3515 6696 x
+4333 6696 4912 6459 x
+5493 6223 5852 5751 x
+6076 5461 6169 5037 x
+6264 4614 6264 3767 x
+7272 fwd_x
+end_ol
+ } def
+/OAA { start_ol
+4626 4685 m
+5526 4458 6003 3877 x
+6480 3297 6480 2427 x
+6480 1226 5643 541 x
+4807 -144 3327 -144 x
+2705 -144 2059 -32 x
+1414 77 792 288 x
+792 1440 l
+1405 1149 2000 1006 x
+2596 864 3186 864 x
+4185 864 4720 1296 x
+5256 1729 5256 2543 x
+5256 3292 4712 3733 x
+4169 4176 3242 4176 x
+2304 4176 l
+2304 5184 l
+3242 5184 l
+4089 5184 4564 5539 x
+5040 5896 5040 6531 x
+5040 7202 4605 7561 x
+4172 7920 3370 7920 x
+2838 7920 2270 7812 x
+1702 7704 1080 7488 x
+1080 8568 l
+1807 8748 2376 8838 x
+2944 8928 3382 8928 x
+4694 8928 5478 8283 x
+6264 7639 6264 6574 x
+6264 5851 5845 5368 x
+5427 4885 4626 4685 x
+7272 fwd_x
+end_ol
+ } def
+/PAA { start_ol
+5976 864 m
+6696 864 l
+6696 -1656 l
+5616 -1656 l
+5616 0 l
+1728 0 l
+1728 -1656 l
+648 -1656 l
+648 864 l
+1055 864 l
+1389 864 1486 2194 x
+1584 3525 1584 4113 x
+1584 6552 l
+5976 6552 l
+5976 864 l
+4896 864 m
+4896 5688 l
+2664 5688 l
+2664 4099 l
+2664 3511 2545 2058 x
+2499 1211 2458 1113 x
+2417 1017 2417 940 x
+2417 864 2616 864 x
+4896 864 l
+7272 fwd_x
+end_ol
+ } def
+/QAA { start_ol
+2232 873 m
+2232 -2520 l
+1152 -2520 l
+1152 6552 l
+2232 6552 l
+2232 5679 l
+2503 6175 2954 6435 x
+3405 6696 3993 6696 x
+5190 6696 5871 5782 x
+6552 4870 6552 3252 x
+6552 1665 5868 760 x
+5185 -144 3993 -144 x
+3393 -144 2941 115 x
+2491 376 2232 873 x
+5400 3276 m
+5400 4506 5004 5133 x
+4608 5760 3827 5760 x
+3042 5760 2637 5130 x
+2232 4501 2232 3276 x
+2232 2056 2637 1424 x
+3042 792 3827 792 x
+4608 792 5004 1418 x
+5400 2045 5400 3276 x
+7272 fwd_x
+end_ol
+ } def
+/RAA { start_ol
+4161 3312 m
+3798 3312 l
+2840 3312 2355 2986 x
+1872 2661 1872 2017 x
+1872 1436 2234 1113 x
+2597 792 3240 792 x
+4143 792 4660 1398 x
+5178 2005 5184 3075 x
+5184 3312 l
+4161 3312 l
+6264 3767 m
+6264 0 l
+5184 0 l
+5184 1028 l
+4834 427 4303 141 x
+3773 -144 3015 -144 x
+2001 -144 1396 421 x
+792 988 792 1939 x
+792 3037 1534 3606 x
+2277 4176 3714 4176 x
+5184 4176 l
+5184 4329 l
+5178 5080 4782 5420 x
+4387 5760 3520 5760 x
+2965 5760 2398 5594 x
+1832 5430 1296 5112 x
+1296 6192 l
+1896 6444 2446 6570 x
+2997 6696 3515 6696 x
+4333 6696 4912 6459 x
+5493 6223 5852 5751 x
+6076 5461 6169 5037 x
+6264 4614 6264 3767 x
+7272 fwd_x
+end_ol
+ } def
+/SAA { start_ol
+2232 3024 m
+2232 864 l
+3616 864 l
+4167 864 4459 1194 x
+4752 1526 4752 2000 x
+4752 2468 4505 2746 x
+4259 3024 3639 3024 x
+2232 3024 l
+2232 5688 m
+2232 3888 l
+3513 3888 l
+3991 3888 4227 4138 x
+4464 4389 4464 4784 x
+4464 5180 4227 5433 x
+3991 5688 3507 5688 x
+2232 5688 l
+1152 6552 m
+3462 6552 l
+4451 6552 5033 6102 x
+5616 5652 5616 4997 x
+5616 4349 5337 3972 x
+5058 3595 4476 3513 x
+5257 3367 5580 2968 x
+5904 2570 5904 1885 x
+5904 983 5294 491 x
+4685 0 3560 0 x
+1152 0 l
+1152 6552 l
+7272 fwd_x
+end_ol
+ } def
+/TAA { start_ol
+6264 360 m
+5827 108 5364 -18 x
+4900 -144 4416 -144 x
+2881 -144 2016 762 x
+1152 1670 1152 3276 x
+1152 4881 2016 5788 x
+2881 6696 4416 6696 x
+4894 6696 5349 6572 x
+5803 6449 6264 6192 x
+6264 5040 l
+5834 5420 5401 5590 x
+4968 5760 4419 5760 x
+3399 5760 2851 5115 x
+2304 4471 2304 3276 x
+2304 2085 2855 1438 x
+3406 792 4419 792 x
+4984 792 5432 967 x
+5881 1143 6264 1512 x
+6264 360 l
+7272 fwd_x
+end_ol
+ } def
+/UAA { start_ol
+4248 5688 m
+4248 0 l
+3168 0 l
+3168 5688 l
+1368 5688 l
+1368 6552 l
+6048 6552 l
+6048 5688 l
+4248 5688 l
+7272 fwd_x
+end_ol
+ } def
+/VAA { start_ol
+5036 2109 m
+4766 1419 4349 295 x
+3768 -1260 3568 -1600 x
+3298 -2061 2893 -2290 x
+2488 -2520 1948 -2520 x
+1080 -2520 l
+1080 -1584 l
+1720 -1584 l
+2196 -1584 2466 -1309 x
+2736 -1035 3152 111 x
+576 6552 l
+1755 6552 l
+3703 1427 l
+5623 6552 l
+6768 6552 l
+5036 2109 l
+7272 fwd_x
+end_ol
+ } def
+/WAA { start_ol
+1800 9432 m
+2520 9432 l
+2583 8994 2858 8780 x
+3134 8568 3632 8568 x
+4120 8568 4396 8780 x
+4672 8994 4752 9432 x
+5472 9432 l
+5407 8607 4944 8191 x
+4482 7776 3632 7776 x
+2790 7776 2326 8191 x
+1864 8607 1800 9432 x
+5112 4732 m
+2232 0 l
+1152 0 l
+1152 6552 l
+2232 6552 l
+2232 1819 l
+5112 6552 l
+6192 6552 l
+6192 0 l
+5112 0 l
+5112 4732 l
+7272 fwd_x
+end_ol
+ } def
+/XAA { start_ol
+6552 3564 m
+6552 3024 l
+1831 3024 l
+1831 2989 l
+1831 1939 2392 1365 x
+2954 792 3976 792 x
+4494 792 5058 951 x
+5622 1112 6264 1440 x
+6264 360 l
+5648 108 5077 -18 x
+4505 -144 3972 -144 x
+2443 -144 1581 766 x
+720 1676 720 3276 x
+720 4835 1569 5765 x
+2418 6696 3834 6696 x
+5095 6696 5823 5856 x
+6552 5017 6552 3564 x
+5472 3888 m
+5448 4803 5017 5281 x
+4586 5760 3778 5760 x
+2989 5760 2477 5261 x
+1966 4764 1872 3882 x
+5472 3888 l
+7272 fwd_x
+end_ol
+ } def
+/YAA { start_ol
+6264 360 m
+5812 108 5338 -18 x
+4863 -144 4330 -144 x
+2649 -144 1720 1045 x
+792 2234 792 4388 x
+792 6532 1725 7729 x
+2660 8928 4330 8928 x
+4863 8928 5338 8802 x
+5812 8676 6264 8424 x
+6264 7200 l
+5829 7587 5330 7789 x
+4830 7992 4325 7992 x
+3168 7992 2592 7095 x
+2016 6199 2016 4388 x
+2016 2584 2592 1687 x
+3168 792 4325 792 x
+4842 792 5338 994 x
+5835 1197 6264 1584 x
+6264 360 l
+7272 fwd_x
+end_ol
+ } def
+/ZAA { start_ol
+1152 8784 m
+6120 8784 l
+6120 7776 l
+4248 7776 l
+4248 1008 l
+6120 1008 l
+6120 0 l
+1152 0 l
+1152 1008 l
+3024 1008 l
+3024 7776 l
+1152 7776 l
+1152 8784 l
+7272 fwd_x
+end_ol
+ } def
+/bAA { start_ol
+6840 5184 m
+6490 5447 6129 5567 x
+5767 5688 5335 5688 x
+4317 5688 3778 5060 x
+3240 4433 3240 3247 x
+3240 0 l
+2160 0 l
+2160 6552 l
+3240 6552 l
+3240 5252 l
+3512 5951 4077 6323 x
+4642 6696 5419 6696 x
+5821 6696 6170 6590 x
+6520 6485 6840 6264 x
+6840 5184 l
+7272 fwd_x
+end_ol
+ } def
+/cAA { start_ol
+5040 5679 m
+5040 9144 l
+6120 9144 l
+6120 0 l
+5040 0 l
+5040 873 l
+4770 376 4320 115 x
+3870 -144 3282 -144 x
+2089 -144 1404 771 x
+720 1688 720 3299 x
+720 4887 1407 5791 x
+2095 6696 3282 6696 x
+3876 6696 4329 6435 x
+4781 6175 5040 5679 x
+1872 3276 m
+1872 2045 2270 1418 x
+2668 792 3447 792 x
+4225 792 4632 1424 x
+5040 2056 5040 3276 x
+5040 4501 4632 5130 x
+4225 5760 3447 5760 x
+2668 5760 2270 5133 x
+1872 4506 1872 3276 x
+7272 fwd_x
+end_ol
+ } def
+/dAA { start_ol
+3600 8424 m
+3600 6552 l
+6048 6552 l
+6048 5688 l
+3600 5688 l
+3600 2154 l
+3600 1433 3874 1148 x
+4150 864 4835 864 x
+6048 864 l
+6048 0 l
+4730 0 l
+3516 0 3018 483 x
+2520 968 2520 2154 x
+2520 5688 l
+792 5688 l
+792 6552 l
+2520 6552 l
+2520 8424 l
+3600 8424 l
+7272 fwd_x
+end_ol
+ } def
+/eAA { start_ol
+6264 360 m
+5827 108 5364 -18 x
+4900 -144 4416 -144 x
+2881 -144 2016 762 x
+1152 1670 1152 3276 x
+1152 4881 2016 5788 x
+2881 6696 4416 6696 x
+4894 6696 5349 6572 x
+5803 6449 6264 6192 x
+6264 5040 l
+5834 5420 5401 5590 x
+4968 5760 4419 5760 x
+3399 5760 2851 5115 x
+2304 4471 2304 3276 x
+2304 2085 2855 1438 x
+3406 792 4419 792 x
+4984 792 5432 967 x
+5881 1143 6264 1512 x
+6264 360 l
+7272 fwd_x
+end_ol
+ } def
+/fAA { start_ol
+5036 2109 m
+4766 1419 4349 295 x
+3768 -1260 3568 -1600 x
+3298 -2061 2893 -2290 x
+2488 -2520 1948 -2520 x
+1080 -2520 l
+1080 -1584 l
+1720 -1584 l
+2196 -1584 2466 -1309 x
+2736 -1035 3152 111 x
+576 6552 l
+1755 6552 l
+3703 1427 l
+5623 6552 l
+6768 6552 l
+5036 2109 l
+7272 fwd_x
+end_ol
+ } def
+/gAA { start_ol
+576 6552 m
+1694 6552 l
+3596 1053 l
+5505 6552 l
+6624 6552 l
+4294 0 l
+2905 0 l
+576 6552 l
+7272 fwd_x
+end_ol
+ } def
+/iAA { start_ol
+2232 873 m
+2232 -2520 l
+1152 -2520 l
+1152 6552 l
+2232 6552 l
+2232 5679 l
+2503 6175 2954 6435 x
+3405 6696 3993 6696 x
+5190 6696 5871 5782 x
+6552 4870 6552 3252 x
+6552 1665 5868 760 x
+5185 -144 3993 -144 x
+3393 -144 2941 115 x
+2491 376 2232 873 x
+5400 3276 m
+5400 4506 5004 5133 x
+4608 5760 3827 5760 x
+3042 5760 2637 5130 x
+2232 4501 2232 3276 x
+2232 2056 2637 1424 x
+3042 792 3827 792 x
+4608 792 5004 1418 x
+5400 2045 5400 3276 x
+7272 fwd_x
+end_ol
+ } def
+/jAA { start_ol
+6192 9144 m
+6192 8280 l
+4980 8280 l
+4406 8280 4182 8032 x
+3960 7785 3960 7156 x
+3960 6552 l
+6192 6552 l
+6192 5688 l
+3960 5688 l
+3960 0 l
+2880 0 l
+2880 5688 l
+1152 5688 l
+1152 6552 l
+2880 6552 l
+2880 7027 l
+2880 8115 3372 8629 x
+3866 9144 4910 9144 x
+6192 9144 l
+7272 fwd_x
+end_ol
+ } def
+/kAA { start_ol
+2376 7776 m
+2376 4536 l
+3740 4536 l
+4556 4536 5014 4963 x
+5472 5391 5472 6159 x
+5472 6926 5017 7350 x
+4563 7776 3740 7776 x
+2376 7776 l
+1152 8784 m
+3740 8784 l
+5195 8784 5945 8115 x
+6696 7447 6696 6159 x
+6696 4857 5947 4192 x
+5200 3528 3740 3528 x
+2376 3528 l
+2376 0 l
+1152 0 l
+1152 8784 l
+7272 fwd_x
+end_ol
+ } def
+/lAA { start_ol
+2880 1800 m
+4392 1800 l
+4392 0 l
+2880 0 l
+2880 1800 l
+7272 fwd_x
+end_ol
+ } def
+end end
+%%EndPrologue
+%%EndPrologue
+%%Page: 1 1
+paps_bop
+(+   36000  791032AAABAACAADAAEAAFAAGAAHAA*  152352IAAJAADAADAAKAA)paps_exec
+(+   36000  777064LAAMAAFAAFAAEAANAABAAHAA*  152352OAAPAAQAARAASAATAAUAASAAVAAWAAUAAXAA)paps_exec
+(+   36000  763096YAAGAAEAABAAJAAFAAJAAHAA)paps_exec
+(+   36000  749128ZAABAA+   57816  749128KAAbAAcAAJAAbAA+  101448  749128dAAKAA+  123264  749128FAAJAAJAA+  152352  749128LAAMAAFAAFAAEAANAABAA+  210528  749128NAABAAcAA+  239616  749128YAAGAAEAABAAJAAFAAJAA+  297792  749128eAAGAANAAbAANAAeAAdAAJAAbAAFAA+  377784  749128fAAKAAMAA+  406872  749128BAAJAAJAAcAA+  443232  749128dAAKAA+  465048  749128GAANAAgAAJAA)paps_exec
+(+   36000  735160NAAiAAiAAbAAKAAiAAbAAEAANAAdAAJAA+  123264  735160jAAKAABAAdAAFAA+  166896  735160KAABAA+  188712  735160fAAKAAMAAbAA+  225072  735160kAAYAAlAA)paps_exec
+paps_eop
+showpage
+%%Pages: 1
+%%Trailer
+%%EOF

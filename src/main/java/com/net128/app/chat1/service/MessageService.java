@@ -6,6 +6,7 @@ import com.net128.app.chat1.model.Message;
 import com.net128.app.chat1.repository.AttachmentRepository;
 import com.net128.app.chat1.repository.MessageRepository;
 
+import com.net128.app.chat1.util.MimeUtil;
 import org.apache.commons.io.IOUtils;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -72,6 +73,10 @@ public class MessageService {
     }
 
     private void attachData(Message message, byte [] data) {
+        message.setMimeType(MimeUtil.mimeType(data));
+        message.setLength(data.length);
+        repository.save(message);
+        repository.flush();
         attachmentRepository.deleteByMessage(message);
         attachmentRepository.flush();
         Attachment attachment = new Attachment(message, data);

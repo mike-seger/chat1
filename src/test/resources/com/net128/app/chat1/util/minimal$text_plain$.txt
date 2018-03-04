@@ -1,0 +1,4 @@
+English:        Hello                                           
+Russian:        Здравствуйте                                        
+Chinese:        你好                                          
+In order to see Russian and Chinese characters you need to have appropriate fonts on your PC.

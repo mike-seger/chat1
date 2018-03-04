@@ -44,6 +44,8 @@ public class Message extends Identifiable implements JsonObject {
     @Size(min = 3, max = 129)
     private String mimeType;
 
+    private int length;
+
     @Transient
     private Content content;
 
@@ -143,6 +145,10 @@ public class Message extends Identifiable implements JsonObject {
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
     }
+
+    public int getLength() { return length; }
+
+    public void setLength(int length) { this.length = length; }
 
     public Content getContent() {
         return content;

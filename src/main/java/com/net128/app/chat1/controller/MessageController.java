@@ -42,6 +42,9 @@ public class MessageController {
             OutputStream stream) throws IOException {
         Message message = service.getMessage(messageId);
         response.setContentType(message.getMimeType());
+        if(message.getLength()>0) {
+            response.setContentLength(message.getLength());
+        }
         service.streamData(messageId, stream);
     }
 
