@@ -1,8 +1,7 @@
 package com.net128.app.chat1.controller;
 
+import com.net128.app.chat1.model.Content;
 import com.net128.app.chat1.model.Message;
-import com.net128.app.chat1.model.RichText;
-import com.net128.app.chat1.model.MessageWithData;
 import com.net128.app.chat1.service.MessageService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,26 +17,22 @@ public class MessageController {
     @Inject
     private MessageService service;
 
-    @GetMapping(value="/user/{userid}/messages")
-    public List<Message> forUser(@PathVariable("userid") String userId ){
-        return service.findUserMessages(userId);
-    }
-
-    @PostMapping(value="/messages")
-    public Message create(@RequestBody MessageWithData message) {
-        return service.create(message);
-    }
-
     @GetMapping(value="/messages")
-    public List<MessageWithData> list() {
-        return service.findAllMessages();
+    public List<Message> getMessages(
+            @RequestParam(name="userId", required = false) String userId,
+            @RequestParam(name="beforeMessageId", required = false) String beforeMessageId,
+            @RequestParam(name="nmax", required = false) Integer maxResults
+        ){
+        return service.findUserMessages(userId, beforeMessageId, maxResults);
     }
 
-    @PutMapping(value = "/messages/{messageId}/data")
-    public void putData(
-            @PathVariable("messageId") String messageId,
-            @RequestBody byte [] data) throws IOException {
-        service.attachData(messageId, data);
+    @PostMapping("/messages")
+    public Message upload(
+            @RequestParam("senderId") String senderId,
+            @RequestParam("recipientId") String recipientId,
+            @RequestParam("text") Content messageText,
+            @RequestParam("file") MultipartFile file) throws IOException {
+        return service.create(senderId, recipientId, messageText, file.getInputStream());
     }
 
     @GetMapping(value = "/messages/{messageId}/data")
@@ -50,12 +45,10 @@ public class MessageController {
         service.streamData(messageId, stream);
     }
 
-    @PostMapping("/message-upload")
-    public Message upload(
-            @RequestParam("senderId") String senderId,
-            @RequestParam("recipientId") String recipientId,
-            @RequestParam("text") RichText messageText,
-            @RequestParam("file") MultipartFile file) throws IOException {
-        return service.create(senderId, recipientId, messageText, file.getInputStream());
+    @PutMapping(value = "/messages/{messageId}/data")
+    public void putData(
+            @PathVariable("messageId") String messageId,
+            @RequestBody byte [] data) {
+        service.attachData(messageId, data);
     }
 }

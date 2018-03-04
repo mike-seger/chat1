@@ -1,13 +1,17 @@
 package com.net128.app.chat1.service;
 
+import com.net128.app.chat1.model.Attachment;
+import com.net128.app.chat1.model.Content;
 import com.net128.app.chat1.model.Message;
-import com.net128.app.chat1.model.RichText;
-import com.net128.app.chat1.model.MessageWithData;
+import com.net128.app.chat1.repository.AttachmentRepository;
 import com.net128.app.chat1.repository.MessageRepository;
-import com.net128.app.chat1.repository.MessageWithDataRepository;
 
 import org.apache.commons.io.IOUtils;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,21 +23,28 @@ import java.io.OutputStream;
 import java.util.List;
 
 @Service
+@Transactional
 public class MessageService {
     @Inject
     private MessageRepository repository;
 
     @Inject
-    private MessageWithDataRepository repositoryWithData;
+    private AttachmentRepository attachmentRepository;
+
+    private @Value("${chat1.messages.repository.maxresults}") int maxResults;
 
     @Transactional(readOnly = true)
-    public List<MessageWithData> findAllMessages() {
-        return repositoryWithData.findAll();
+    public List<Message> findAllMessages() {
+        return repository.findAll();
     }
 
-    @Transactional
-    public List<Message> findUserMessages(String userId) {
-        return repository.findByUserId(userId);
+    public List<Message> findUserMessages(String userId, String beforeMessageId, Integer maxResults) {
+        if(maxResults==null) {
+            maxResults=this.maxResults;
+        }
+        Pageable topResults = new PageRequest(0, maxResults);
+        Page<Message> messagePage=repository.findByUserIdBeforeMessageId(userId, beforeMessageId, topResults);
+        return messagePage.getContent();
     }
 
     @Transactional(readOnly = true)
@@ -42,34 +53,37 @@ public class MessageService {
         return message;
     }
 
-    @Transactional
-    public Message create(MessageWithData message) {
-        repositoryWithData.save(message);
-        repositoryWithData.flush();
+    public Message create(Message message) {
+        repository.save(message);
+        repository.flush();
         return getMessage(message.getId());
     }
 
-    @Transactional
-    public Message create(String senderId, String recipientId, RichText messageText, InputStream inputStream) throws IOException {
-        MessageWithData message = new MessageWithData(senderId, recipientId, messageText);
-        message.setData(IOUtils.toByteArray(inputStream));
-        repositoryWithData.save(message);
-        repositoryWithData.flush();
-        return getMessage(message.getId());
+    public Message create(String senderId, String recipientId, Content messageText, InputStream inputStream) throws IOException {
+        Message message = new Message(senderId, recipientId, messageText);
+        repository.save(message);
+        repository.flush();
+        attachData(message, IOUtils.toByteArray(inputStream));
+        return message;
     }
 
-    @Transactional
-    public void attachData(String messageId, byte [] data) throws IOException {
-        MessageWithData message = repositoryWithData.getOne(messageId);
-        message.setData(data);
-        repositoryWithData.save(message);
+    public void attachData(String messageId, byte [] data) {
+        attachData(repository.getOne(messageId), data);
+    }
+
+    private void attachData(Message message, byte [] data) {
+        attachmentRepository.deleteByMessage(message);
+        attachmentRepository.flush();
+        Attachment attachment = new Attachment(message, data);
+        attachmentRepository.save(attachment);
     }
 
     @Transactional(readOnly = true)
     public void streamData(String messageId, OutputStream outputStream) throws IOException {
-        MessageWithData message=repositoryWithData.getOne(messageId);
-        if(message.getData()!=null) {
-            try (InputStream is = new ByteArrayInputStream(message.getData())) {
+        Pageable singleResult = new PageRequest(0, 1);
+        List<Attachment> attachments=attachmentRepository.findByMessage(repository.getOne(messageId), singleResult).getContent();
+        if(attachments.size()>0) {
+            try (InputStream is = new ByteArrayInputStream(attachments.get(0).getData())) {
                 IOUtils.copy(is, outputStream);
             }
         }
