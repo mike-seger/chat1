@@ -45,7 +45,7 @@ public class MessageControllerTest {
             .willReturn(Arrays.asList(
                     new Message("user1", "user2", new Content("content1")),
                     new Message("user2", "user3", new Content("content2")),
-                    new Message("user3", "user1", new Content("content3"))
+
             ));
 
         mvc.perform(get("/messages")).andExpect(status().isOk())
@@ -57,9 +57,6 @@ public class MessageControllerTest {
             .andExpect(jsonPath("$[1].senderId", is("user2")))
             .andExpect(jsonPath("$[1].recipientId", is("user3")))
             .andExpect(jsonPath("$[1].content.text", is("content2")))
-            .andExpect(jsonPath("$[2].senderId", is("user3")))
-            .andExpect(jsonPath("$[2].recipientId", is("user1")))
-            .andExpect(jsonPath("$[2].content.text", is("content3")))
         ;
     }
 
