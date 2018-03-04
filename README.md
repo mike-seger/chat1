@@ -12,7 +12,8 @@
 
 ## Swagger API Documentation
 http://localhost:8080/swagger-ui.html
-
+### Swagger JSON
+http://localhost:8080/v2/api-docs
 ### Swagger yml
 http://localhost:8080//swagger.yml
 
