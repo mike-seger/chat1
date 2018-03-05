@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public interface JsonObject {
+public interface JsonObject<T> {
     ObjectMapper mapper=new ObjectMapper();
     default String toJson() {
         try {
@@ -16,9 +16,10 @@ public interface JsonObject {
             throw new RuntimeException("Cannot convert to Json", e);
         }
     }
-    default void fromJson(String json) {
+    default T fromJson(String json) {
         try {
             mapper.readerForUpdating(this).readValue(json);
+            return (T)this;
         } catch (IOException e) {
             throw new RuntimeException("Cannot convert from Json: "+json, e);
         }

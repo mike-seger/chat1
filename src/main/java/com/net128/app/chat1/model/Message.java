@@ -13,7 +13,7 @@ import java.util.UUID;
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
 @Entity
-public class Message extends Identifiable implements JsonObject {
+public class Message extends Identifiable implements JsonObject<Message> {
     @JsonProperty(access = READ_ONLY)
     @Column(nullable = false)
     private LocalDateTime sent;
@@ -162,13 +162,27 @@ public class Message extends Identifiable implements JsonObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Message that = (Message) o;
-        return Objects.equals(getId(), that.getId());
+        Message message = (Message) o;
+        if(getId()!=null && Objects.equals(getId(), message.getId())) {
+            return true;
+        }
+        return getLength() == message.getLength() &&
+                Objects.equals(getSent(), message.getSent()) &&
+                Objects.equals(getDelivered(), message.getDelivered()) &&
+                Objects.equals(getRead(), message.getRead()) &&
+                Objects.equals(getSenderId(), message.getSenderId()) &&
+                Objects.equals(getRecipientId(), message.getRecipientId()) &&
+                Objects.equals(getText(), message.getText()) &&
+                Objects.equals(getMimeType(), message.getMimeType()) &&
+                Objects.equals(getContent(), message.getContent());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        if(getId()!=null) {
+            return Objects.hash(getId());
+        }
+        return Objects.hash(getSent(), getDelivered(), getRead(), getSenderId(), getRecipientId(), getText(), getMimeType(), getLength(), getContent());
     }
 
     public String toString() {

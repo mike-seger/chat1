@@ -28,11 +28,9 @@ public class MessageController {
 
     @PostMapping("/messages")
     public Message upload(
-            @RequestParam("senderId") String senderId,
-            @RequestParam("recipientId") String recipientId,
-            @RequestParam("text") String messageText,
+            @RequestParam("message") String messageJson,
             @RequestParam("file") MultipartFile file) throws IOException {
-        return service.create(senderId, recipientId, new Content(messageText), file);
+        return service.create(new Message().fromJson(messageJson), file);
     }
 
     @GetMapping(value = "/messages/{messageId}/data")

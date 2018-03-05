@@ -61,8 +61,7 @@ public class MessageService {
         return getMessage(message.getId());
     }
 
-    public Message create(String senderId, String recipientId, Content messageText, MultipartFile file) throws IOException {
-        Message message = new Message(senderId, recipientId, messageText);
+    public Message create(Message message, MultipartFile file) throws IOException {
         repository.save(message);
         repository.flush();
         try (InputStream is=file.getInputStream()) {

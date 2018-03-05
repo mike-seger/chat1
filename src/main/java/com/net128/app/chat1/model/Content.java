@@ -2,7 +2,7 @@ package com.net128.app.chat1.model;
 
 import java.util.Objects;
 
-public class Content implements JsonObject {
+public class Content implements JsonObject<Content> {
     public String title;
     public String text;
     public String description;
