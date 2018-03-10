@@ -1,10 +1,9 @@
 package com.net128.app.chat1.controller;
 
-import com.net128.app.chat1.model.Content;
+import com.net128.app.chat1.model.Attachment;
 import com.net128.app.chat1.model.Message;
 import com.net128.app.chat1.service.MessageService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
@@ -26,15 +25,14 @@ public class MessageController {
         return service.findUserMessages(userId, beforeMessageId, maxResults);
     }
 
-    @PostMapping("/messages")
-    public Message upload(
-            @RequestParam("message") String messageJson,
-            @RequestParam("file") MultipartFile file) throws IOException {
-        return service.create(new Message().fromJson(messageJson), file);
+
+    @PostMapping(value="/messages")
+    public Message sendMessages(@RequestBody Message message){
+        return service.create(message);
     }
 
-    @GetMapping(value = "/messages/{messageId}/data")
-    public void getData(
+    @GetMapping(value = "/messages/{messageId}/attachment")
+    public void getAttachment(
             @PathVariable("messageId") String messageId,
             HttpServletResponse response,
             OutputStream stream) throws IOException {
@@ -43,13 +41,13 @@ public class MessageController {
         if(message.getLength()>0) {
             response.setContentLength(message.getLength());
         }
-        service.streamData(messageId, stream);
+        service.streamAttachment(messageId, stream);
     }
 
-    @PutMapping(value = "/messages/{messageId}/data")
-    public void putData(
+    @PutMapping(value = "/messages/{messageId}/attachment")
+    public void putAttachment(
             @PathVariable("messageId") String messageId,
-            @RequestBody byte [] data) {
-        service.attachData(messageId, data);
+            @RequestBody Attachment attachment) {
+        service.attach(messageId, attachment);
     }
 }

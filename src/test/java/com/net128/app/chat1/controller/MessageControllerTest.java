@@ -58,17 +58,4 @@ public class MessageControllerTest {
             .andExpect(jsonPath("$[1].content.text", is("content2")))
         ;
     }
-
-    @Test
-    @WithMockUser(username = "admin", password = "admin", roles = "ADMIN")
-    public void shouldSaveUploadedMessage() throws Exception {
-        Message message=new Message("user1", "user2", new Content("Hello uploaded message"));
-        MockMultipartFile multipartFile = new MockMultipartFile("file", "test.txt",
-                "text/plain", "Spring Framework".getBytes());
-        mvc.perform(fileUpload("/messages").file(multipartFile)
-                .param("message", message.toJson())
-            )
-            .andExpect(status().isOk());
-        then(service).should().create(message, multipartFile);
-    }
 }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Profile("dev")
 public class SwaggerUIController {
     private static Logger logger = LoggerFactory.getLogger(SwaggerUIController.class);
-    public static final String APPLICATION_YML_VALUE = "application/yml";
+    public static final String APPLICATION_YML_VALUE = "text/plain"; //FIXME most browsers don't render "application/yml";
 
     @Autowired
     private SwaggerUIService service;

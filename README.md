@@ -8,7 +8,7 @@
 
 /messages/{messageId}
 
-/messages/{messageId}/data
+/messages/{messageId}/attachment
 
 ## Swagger API Documentation
 http://localhost:18090/swagger-ui.html
@@ -28,6 +28,6 @@ ids=( $(curl -s http://admin:admin@localhost:18090/messages | jq -r .[].id) )
 n=${#ids[@]}
 idnm2=${ids[$((n-2))]}
 echo "$(date): This is the data stored in the message attachment" | \
-    curl -v -X PUT -T - http://admin:admin@localhost:18090/messages/$idnm2/data
-curl http://admin:admin@localhost:18090/messages/$idnm2/data
+    curl -v -X PUT -T - http://admin:admin@localhost:18090/messages/$idnm2/attachment
+curl http://admin:admin@localhost:18090/messages/$idnm2/attachment
 ```
