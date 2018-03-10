@@ -6,9 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public interface JsonObject<T> {
-    ObjectMapper mapper=new ObjectMapper();
+    ObjectMapper mapper=new ObjectMapper()
+        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+        .setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
     default String toJson() {
         try {
             return mapper.writeValueAsString(this);
