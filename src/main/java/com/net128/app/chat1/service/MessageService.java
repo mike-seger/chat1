@@ -61,6 +61,17 @@ public class MessageService {
         attach(repository.getOne(messageId), attachment);
     }
 
+    @Transactional(readOnly = true)
+    public void streamAttachment(String messageId, OutputStream outputStream) throws IOException {
+        Pageable singleResult = new PageRequest(0, 1);
+        List<Attachment> attachments=attachmentRepository.findByMessage(repository.getOne(messageId), singleResult).getContent();
+        if(attachments.size()>0) {
+            try (InputStream is = new ByteArrayInputStream(attachments.get(0).getData())) {
+                IOUtils.copy(is, outputStream);
+            }
+        }
+    }
+
     private void attach(Message message, Attachment attachment) {
         message.setMimeType(MimeUtil.mimeType(attachment.getData()));
         message.setLength(attachment.getData().length);
@@ -71,16 +82,5 @@ public class MessageService {
         attachmentRepository.flush();
         attachment.setMessage(message);
         attachmentRepository.save(attachment);
-    }
-
-    @Transactional(readOnly = true)
-    public void streamAttachment(String messageId, OutputStream outputStream) throws IOException {
-        Pageable singleResult = new PageRequest(0, 1);
-        List<Attachment> attachments=attachmentRepository.findByMessage(repository.getOne(messageId), singleResult).getContent();
-        if(attachments.size()>0) {
-            try (InputStream is = new ByteArrayInputStream(attachments.get(0).getData())) {
-                IOUtils.copy(is, outputStream);
-            }
-        }
     }
 }

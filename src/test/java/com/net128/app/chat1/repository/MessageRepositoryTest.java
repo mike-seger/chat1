@@ -25,7 +25,7 @@ public class MessageRepositoryTest {
     @Inject
     private MessageRepository repository;
 
-    private final String senderId="senderId";
+    private final static String senderId="senderId";
 
     @Test
     public void testSaveMessage() {

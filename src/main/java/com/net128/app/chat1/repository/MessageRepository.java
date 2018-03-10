@@ -17,7 +17,7 @@ public interface MessageRepository extends JpaRepository<Message, String> {
             "  and ( :date is null " +
             "    or (:before = true and m.sent <= :date) " +
             "    or (:before = false and m.sent >= :date) ) " +
-            "order by m.sent desc, m.id"
+            "order by m.sent, m.id"
     )
     Page<Message> findByUserIdSentAroundMessageId(
         @Param("userId") String userId,
