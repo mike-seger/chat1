@@ -22,8 +22,8 @@ http://localhost:18090/h2_console/
 
 ## Curl examples
 ```
-curl -X POST http://admin:admin@localhost:18090/generate/10
-curl http://admin:admin@localhost:18090/messages | jq .
+curl http://admin:admin@localhost:18090/generate/10
+curl -s http://admin:admin@localhost:18090/messages | jq .
 ids=( $(curl -s http://admin:admin@localhost:18090/messages | jq -r .[].id) )
 n=${#ids[@]}
 idnm2=${ids[$((n-2))]}

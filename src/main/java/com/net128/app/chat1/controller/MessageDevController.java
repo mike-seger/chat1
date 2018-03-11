@@ -21,7 +21,7 @@ public class MessageDevController {
     private UserContext userContext=
         new UserContext(true, "admin12345678");
 
-    @PostMapping("/generate/{n}")
+    @GetMapping("/generate/{n}")
     public void generate(@PathVariable("n") int n){
         for(int i=0;i<n;i++) {
             char fromId=randomId(n);
