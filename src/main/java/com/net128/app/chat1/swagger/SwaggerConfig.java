@@ -20,6 +20,7 @@ public class SwaggerConfig {
             .select()
             .apis(RequestHandlerSelectors.any())
             .apis(Predicates.not(RequestHandlerSelectors.basePackage("com.net128.app.chat1.swagger")))
+            .apis(Predicates.not(RequestHandlerSelectors.basePackage("com.net128.app.chat1.swagger")))
             .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework")))
             .paths(PathSelectors.any())
             .build();
