@@ -2,6 +2,7 @@ package com.net128.app.chat1.service;
 
 import com.net128.app.chat1.model.Attachment;
 import com.net128.app.chat1.model.Message;
+import com.net128.app.chat1.model.UserContext;
 import com.net128.app.chat1.repository.AttachmentRepository;
 import com.net128.app.chat1.repository.MessageRepository;
 
@@ -33,7 +34,7 @@ public class MessageService {
 
     private @Value("${chat1.messages.repository.maxresults}") int maxResults;
 
-    public List<Message> findUserMessages(String userId, String aroundMessageId, Integer maxResults) {
+    public List<Message> findUserMessages(UserContext context, String userId, String aroundMessageId, Integer maxResults) {
         boolean sentBefore=false;
         if(maxResults==null) {
             maxResults=this.maxResults;
@@ -51,18 +52,18 @@ public class MessageService {
         return message;
     }
 
-    public Message create(Message message) {
+    public Message create(UserContext context, Message message) {
         repository.save(message);
         repository.flush();
         return getMessage(message.getId());
     }
 
-    public void attach(String messageId, Attachment attachment) {
-        attach(repository.getOne(messageId), attachment);
+    public void attach(UserContext context, String messageId, Attachment attachment) {
+        attach(context, repository.getOne(messageId), attachment);
     }
 
     @Transactional(readOnly = true)
-    public void streamAttachment(String messageId, OutputStream outputStream) throws IOException {
+    public void streamAttachment(UserContext context, String messageId, OutputStream outputStream) throws IOException {
         Pageable singleResult = new PageRequest(0, 1);
         List<Attachment> attachments=attachmentRepository.findByMessage(repository.getOne(messageId), singleResult).getContent();
         if(attachments.size()>0) {
@@ -72,7 +73,7 @@ public class MessageService {
         }
     }
 
-    private void attach(Message message, Attachment attachment) {
+    private void attach(UserContext context, Message message, Attachment attachment) {
         message.setMimeType(MimeUtil.mimeType(attachment.getData()));
         message.setLength(attachment.getData().length);
         repository.save(message);

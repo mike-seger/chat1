@@ -21,9 +21,6 @@ public class Message extends Identifiable implements JsonObject<Message> {
     @JsonProperty(access = READ_ONLY)
     private LocalDateTime delivered;
 
-    @JsonProperty(access = READ_ONLY)
-    private LocalDateTime read;
-
     @NotNull
     @Column(length = 256, nullable = false)
     @Size(max = 256)
@@ -44,10 +41,12 @@ public class Message extends Identifiable implements JsonObject<Message> {
     @Size(min = 3, max = 129)
     private String mimeType;
 
-    private int length;
-
     @Transient
     private Content content;
+
+    @Transient
+    @JsonIgnore
+    private int length;
 
     public Message() {}
     public Message(String senderId, String recipientId, Content content) {
@@ -106,14 +105,6 @@ public class Message extends Identifiable implements JsonObject<Message> {
         this.delivered = delivered;
     }
 
-    public LocalDateTime getRead() {
-        return read;
-    }
-
-    public void setRead(LocalDateTime read) {
-        this.read = read;
-    }
-
     public String getSenderId() {
         return senderId;
     }
@@ -146,16 +137,20 @@ public class Message extends Identifiable implements JsonObject<Message> {
         this.mimeType = mimeType;
     }
 
-    public int getLength() { return length; }
-
-    public void setLength(int length) { this.length = length; }
-
     public Content getContent() {
         return content;
     }
 
     public void setContent(Content content) {
         this.content = content;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
     }
 
     @Override
@@ -166,10 +161,8 @@ public class Message extends Identifiable implements JsonObject<Message> {
         if(getId()!=null && Objects.equals(getId(), message.getId())) {
             return true;
         }
-        return getLength() == message.getLength() &&
-                Objects.equals(getSent(), message.getSent()) &&
+        return Objects.equals(getSent(), message.getSent()) &&
                 Objects.equals(getDelivered(), message.getDelivered()) &&
-                Objects.equals(getRead(), message.getRead()) &&
                 Objects.equals(getSenderId(), message.getSenderId()) &&
                 Objects.equals(getRecipientId(), message.getRecipientId()) &&
                 Objects.equals(getText(), message.getText()) &&
@@ -182,7 +175,7 @@ public class Message extends Identifiable implements JsonObject<Message> {
         if(getId()!=null) {
             return Objects.hash(getId());
         }
-        return Objects.hash(getSent(), getDelivered(), getRead(), getSenderId(), getRecipientId(), getText(), getMimeType(), getLength(), getContent());
+        return Objects.hash(getSent(), getDelivered(), getSenderId(), getRecipientId(), getText(), getMimeType(), getContent());
     }
 
     public String toString() {

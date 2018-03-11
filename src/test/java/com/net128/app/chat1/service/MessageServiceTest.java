@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import com.net128.app.chat1.model.Content;
 import com.net128.app.chat1.model.Message;
+import com.net128.app.chat1.model.UserContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,16 +29,19 @@ public class MessageServiceTest {
     private final static int nMessages=10;
     private final static int startMessageIndex=5;
 
+    //TODO make tests parameterized with all elevations - affecting sender too
+    private final UserContext userContext=new UserContext(false, senderId);
+
     @Test
     public void testCreateAndGetMessage() {
-        Message message = service.create(newMessage(senderId));
+        Message message = service.create(userContext, newMessage(senderId));
         assertEquals(message, service.getMessage(message.getId()));
     }
 
     @Test
     public void testFindUserMessages() {
         List<Message> messages=newSavedMessages(nMessages);
-        List<Message> foundMessages=service.findUserMessages(senderId, null, nMessages);
+        List<Message> foundMessages=service.findUserMessages(userContext, senderId,null, nMessages);
         assertEquals(messages.size(), foundMessages.size());
     }
 
@@ -45,18 +49,18 @@ public class MessageServiceTest {
     public void testFindUserMessagesAfter() {
         List<Message> messages=newSavedMessages(nMessages);
         Message message5=messages.get(5);
-        List<Message> foundMessages=service.findUserMessages(senderId, message5.getId(), nMessages);
+        List<Message> foundMessages=service.findUserMessages(userContext, senderId, message5.getId(), nMessages);
         assertEquals(messages.subList(startMessageIndex+1, nMessages), foundMessages);
-        assertEquals(2*nMessages, service.findUserMessages(null, null, null).size());
+        assertEquals(2*nMessages, service.findUserMessages(userContext, null, null, null).size());
     }
 
     @Test
     public void testFindUserMessagesBefore() {
         List<Message> messages=newSavedMessages(nMessages);
         Message message5=messages.get(5);
-        List<Message> foundMessages=service.findUserMessages(senderId, message5.getId(), -nMessages);
+        List<Message> foundMessages=service.findUserMessages(userContext, senderId, message5.getId(), -nMessages);
         assertEquals(messages.subList(0, startMessageIndex), foundMessages);
-        assertEquals(2*nMessages, service.findUserMessages(null, null, null).size());
+        assertEquals(2*nMessages, service.findUserMessages(userContext, null, null, null).size());
     }
 
     private List<Message> newSavedMessages(int n) {
@@ -64,8 +68,8 @@ public class MessageServiceTest {
         long time=System.currentTimeMillis();
         while(n-->0) {
             while(time==System.currentTimeMillis());
-            messages.add(service.create(newMessage(senderId)));
-            service.create(newMessage(otherSenderId));
+            messages.add(service.create(userContext, newMessage(senderId)));
+            service.create(userContext, newMessage(otherSenderId));
         }
         return messages;
     }
