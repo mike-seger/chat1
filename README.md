@@ -24,10 +24,12 @@ http://localhost:18090/h2_console/
 ```
 curl http://admin:admin@localhost:18090/generate/10
 curl -s http://admin:admin@localhost:18090/messages | jq .
-ids=( $(curl -s http://admin:admin@localhost:18090/messages | jq -r .[].id) )
+ids=( $(curl -s  -H "Accept: application/json" http://admin:admin@localhost:18090/messages | jq -r .[].id) )
 n=${#ids[@]}
 idnm2=${ids[$((n-2))]}
-echo "$(date): This is the data stored in the message attachment" | \
-    curl -v -X PUT -T - http://admin:admin@localhost:18090/messages/$idnm2/attachment
+data=$(echo "$(date): This is the data stored in the message attachment" |base64)
+attjson="{\"data\":\"$data\",\"fileName\":\"fileName\"}"
+echo "$attjson" | curl -v -H "Content-Type: application/json" -X PUT \
+    -d @- http://admin:admin@localhost:18090/messages/$idnm2/attachment
 curl http://admin:admin@localhost:18090/messages/$idnm2/attachment
 ```

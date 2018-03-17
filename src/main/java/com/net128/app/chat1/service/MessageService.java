@@ -1,8 +1,6 @@
 package com.net128.app.chat1.service;
 
-import com.net128.app.chat1.model.Attachment;
-import com.net128.app.chat1.model.Message;
-import com.net128.app.chat1.model.UserContext;
+import com.net128.app.chat1.model.*;
 import com.net128.app.chat1.repository.AttachmentRepository;
 import com.net128.app.chat1.repository.MessageRepository;
 
@@ -48,7 +46,7 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public Message getMessage(String messageId) {
-        Message message = repository.getOne(messageId);
+        Message message = repository.findOne(messageId);
         return message;
     }
 
@@ -59,7 +57,25 @@ public class MessageService {
     }
 
     public void attach(UserContext context, String messageId, Attachment attachment) {
-        attach(context, repository.getOne(messageId), attachment);
+        Message message = repository.findOne(messageId);
+        if(message==null) {
+            return;
+        }
+        Payload payload = message.getPayload();
+        if(payload ==null) {
+            payload = new Payload();
+        }
+        attachment.setMimeType(MimeUtil.mimeType(attachment.getData()));
+        payload.attachmentInfo=new Payload.AttachmentInfo(attachment.getMimeType(), attachment.getFileName());
+        message.setPayload(payload);
+        message.setText(null);
+        message.setLength(attachment.getData().length);
+        message = repository.saveAndFlush(message);
+
+        attachmentRepository.deleteByMessage(message);
+        attachmentRepository.flush();
+        attachment.setMessage(message);
+        attachmentRepository.save(attachment);
     }
 
     @Transactional(readOnly = true)
@@ -71,17 +87,5 @@ public class MessageService {
                 IOUtils.copy(is, outputStream);
             }
         }
-    }
-
-    private void attach(UserContext context, Message message, Attachment attachment) {
-        message.setMimeType(MimeUtil.mimeType(attachment.getData()));
-        message.setLength(attachment.getData().length);
-        repository.save(message);
-        repository.flush();
-
-        attachmentRepository.deleteByMessage(message);
-        attachmentRepository.flush();
-        attachment.setMessage(message);
-        attachmentRepository.save(attachment);
     }
 }

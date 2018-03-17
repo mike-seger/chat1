@@ -2,7 +2,7 @@ package com.net128.app.chat1.service;
 
 import static org.junit.Assert.*;
 
-import com.net128.app.chat1.model.Content;
+import com.net128.app.chat1.model.Payload;
 import com.net128.app.chat1.model.Message;
 import com.net128.app.chat1.model.UserContext;
 import org.junit.Test;
@@ -75,6 +75,6 @@ public class MessageServiceTest {
     }
 
     private Message newMessage(String senderId) {
-        return new Message(senderId, "recipientId", new Content("content"));
+        return new Message(senderId, "recipientId", new Payload("content"));
     }
 }

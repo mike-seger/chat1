@@ -1,6 +1,6 @@
 package com.net128.app.chat1.controller;
 
-import com.net128.app.chat1.model.Content;
+import com.net128.app.chat1.model.Payload;
 import com.net128.app.chat1.model.Message;
 import com.net128.app.chat1.model.UserContext;
 import com.net128.app.chat1.service.MessageService;
@@ -27,7 +27,7 @@ public class MessageDevController {
             char fromId=randomId(n);
             char toId=randomId(n);
             messageService.create(userContext, new Message("TestUserID "+fromId,
-                "TestUserID "+toId, new Content("Hello "+i)));
+                "TestUserID "+toId, new Payload("Hello "+i)));
         }
     }
 

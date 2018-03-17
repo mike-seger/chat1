@@ -3,7 +3,7 @@ package com.net128.app.chat1.repository;
 import static org.junit.Assert.*;
 
 import com.google.common.collect.Lists;
-import com.net128.app.chat1.model.Content;
+import com.net128.app.chat1.model.Payload;
 import com.net128.app.chat1.model.Message;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,6 +66,6 @@ public class MessageRepositoryTest {
     }
 
     private Message newMessage() {
-        return new Message(senderId, "recipientId", new Content("content"));
+        return new Message(senderId, "recipientId", new Payload("content"));
     }
 }

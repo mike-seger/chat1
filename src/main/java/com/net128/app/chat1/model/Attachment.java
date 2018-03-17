@@ -3,6 +3,7 @@ package com.net128.app.chat1.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Attachment extends Identifiable {
@@ -12,6 +13,9 @@ public class Attachment extends Identifiable {
 
     @Lob
     private byte [] data;
+
+    private String fileName;
+    private String mimeType;
 
     public Attachment(){}
 
@@ -34,5 +38,21 @@ public class Attachment extends Identifiable {
 
     public void setData(byte[] data) {
         this.data = data;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 }

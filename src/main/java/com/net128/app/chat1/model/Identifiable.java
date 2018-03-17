@@ -1,6 +1,7 @@
 package com.net128.app.chat1.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -18,10 +19,11 @@ public class Identifiable {
     @JsonProperty(access = READ_ONLY)
     @Column(length = 32)
     @Size(max = 32)
+    @ApiModelProperty(value = "The unique id (uuid)", position = 1)
     private String id;
 
     @PrePersist
-    private void initId() {
+    protected void initId() {
         id = UUID.randomUUID().toString().replace("-", "");
     }
 

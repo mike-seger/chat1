@@ -2,33 +2,38 @@ package com.net128.app.chat1.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.UUID;
 
-import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.*;
 
 @Entity
 public class Message extends Identifiable implements JsonObject<Message> {
     @JsonProperty(access = READ_ONLY)
     @Column(nullable = false)
+    @ApiModelProperty(value = "The date the message was sent (set automatically)", position = 2, required = true)
     private LocalDateTime sent;
 
     @JsonProperty(access = READ_ONLY)
+    @ApiModelProperty(value = "The date the message was delivered (set automatically)", position = 3)
     private LocalDateTime delivered;
 
     @NotNull
     @Column(length = 256, nullable = false)
     @Size(max = 256)
+    @ApiModelProperty(value = "The id of the sender (set automatically)", position = 4, required = true)
     private String senderId;
 
     @NotNull
     @Column(length = 256, nullable = false)
     @Size(max = 256)
+    //@JsonProperty(access = WRITE_ONLY)
+    @ApiModelProperty(value = "The id of the recipient", position = 5, required = true)
     private String recipientId;
 
     @NotNull
@@ -37,56 +42,53 @@ public class Message extends Identifiable implements JsonObject<Message> {
     @Size(max = 4000)
     private String text;
 
-    @Column(length = 129)
-    @Size(min = 3, max = 129)
-    private String mimeType;
-
     @Transient
-    private Content content;
+    @ApiModelProperty(value = "The 'content' of the message, All of its attributes are optional", position = 6)
+    private Payload payload;
 
     @Transient
     @JsonIgnore
     private int length;
 
     public Message() {}
-    public Message(String senderId, String recipientId, Content content) {
+    public Message(String senderId, String recipientId, Payload payload) {
         this.senderId = senderId;
         this.recipientId = recipientId;
-        this.content = content;
-    }
-
-    @PostLoad
-    private void postLoad() {
-        if(delivered ==null) {
-            delivered = LocalDateTime.now();
-        }
-        content = unmarshalMessageText(text);
-    }
-
-    @PrePersist
-    private void prePersist() {
-        sent = LocalDateTime.now();
-        text = marshalMessageText(content);
+        this.payload = payload;
     }
 
     @PreUpdate
-    private void preUpdate() {
-        text = marshalMessageText(content);
+    public void preUpdateMessage() {
+        text = marshalMessageText(payload);
     }
 
-    private String marshalMessageText(Content content) {
-        if(content==null) {
-            content = new Content();
+    @PrePersist
+    public void prePersistMessage() {
+        sent = LocalDateTime.now();
+        preUpdateMessage();
+    }
+
+    @PostLoad
+    public void postLoadMessage() {
+        if(delivered ==null) {
+            delivered = LocalDateTime.now();
         }
-        return  content.toJson();
+        payload = unmarshalMessageText(text);
     }
 
-    private Content unmarshalMessageText(String json) {
-        Content content = new Content();
+    private String marshalMessageText(Payload payload) {
+        if(payload ==null) {
+            payload = new Payload();
+        }
+        return  payload.toJson();
+    }
+
+    private Payload unmarshalMessageText(String json) {
+        Payload payload = new Payload();
         if(json!=null) {
-            content.fromJson(json);
+            payload.fromJson(json);
         }
-        return content;
+        return payload;
     }
 
     public LocalDateTime getSent() {
@@ -129,20 +131,12 @@ public class Message extends Identifiable implements JsonObject<Message> {
         this.text = text;
     }
 
-    public String getMimeType() {
-        return mimeType;
+    public Payload getPayload() {
+        return payload;
     }
 
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
-    }
-
-    public Content getContent() {
-        return content;
-    }
-
-    public void setContent(Content content) {
-        this.content = content;
+    public void setPayload(Payload payload) {
+        this.payload = payload;
     }
 
     public int getLength() {
@@ -166,8 +160,7 @@ public class Message extends Identifiable implements JsonObject<Message> {
                 Objects.equals(getSenderId(), message.getSenderId()) &&
                 Objects.equals(getRecipientId(), message.getRecipientId()) &&
                 Objects.equals(getText(), message.getText()) &&
-                Objects.equals(getMimeType(), message.getMimeType()) &&
-                Objects.equals(getContent(), message.getContent());
+                Objects.equals(getPayload(), message.getPayload());
     }
 
     @Override
@@ -175,7 +168,7 @@ public class Message extends Identifiable implements JsonObject<Message> {
         if(getId()!=null) {
             return Objects.hash(getId());
         }
-        return Objects.hash(getSent(), getDelivered(), getSenderId(), getRecipientId(), getText(), getMimeType(), getContent());
+        return Objects.hash(getSent(), getDelivered(), getSenderId(), getRecipientId(), getText(), getPayload());
     }
 
     public String toString() {
