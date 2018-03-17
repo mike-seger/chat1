@@ -117,8 +117,8 @@ public class MessageController {
        return messageService.create(userService.getUserContext(request), message);
     }
 
-    @ApiOperation(value = "Get the file content attached to a message",
-            notes = "Get the file content attached to a message by message id. The binary content is returned  with the original file name and the determined content type.",
+    @ApiOperation(value = "Get file content attached to a message",
+            notes = "Get file content attached to a message by message id. The binary content is returned  with the original file name and the determined content type.",
             nickname = "getAttachment")
     @GetMapping(value = "{messageId}/attachment")
     public void getAttachment(
@@ -136,8 +136,8 @@ public class MessageController {
         messageService.streamAttachment(userService.getUserContext(request), messageId, stream);
     }
 
-    @ApiOperation(value = "Attach the file content to a message",
-        notes = "Attach the file content to a message.",
+    @ApiOperation(value = "Attach file content to a message",
+        notes = "Attach file content to a message.",
         nickname = "putAttachment")
     @PutMapping(value = "{messageId}/attachment")
     public void putAttachment(
