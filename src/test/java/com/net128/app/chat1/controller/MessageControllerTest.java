@@ -67,10 +67,10 @@ public class MessageControllerTest {
             .andExpect(jsonPath("$", hasSize(2)))
             .andExpect(jsonPath("$[0].senderId", is("user1")))
             .andExpect(jsonPath("$[0].recipientId", is("user2")))
-            .andExpect(jsonPath("$[0].payload.text", is("text1")))
+            .andExpect(jsonPath("$[0].text", is("text1")))
             .andExpect(jsonPath("$[1].senderId", is("user2")))
             .andExpect(jsonPath("$[1].recipientId", is("user3")))
-            .andExpect(jsonPath("$[1].payload.text", is("text2")))
+            .andExpect(jsonPath("$[1].text", is("text2")))
         ;
     }
 }

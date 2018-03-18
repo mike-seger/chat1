@@ -51,9 +51,7 @@ public class MessageService {
     }
 
     public Message create(UserContext context, Message message) {
-        repository.save(message);
-        repository.flush();
-        return getMessage(message.getId());
+        return repository.saveAndFlush(message);
     }
 
     public void attach(UserContext context, String messageId, Attachment attachment) {
@@ -75,7 +73,7 @@ public class MessageService {
         attachmentRepository.deleteByMessage(message);
         attachmentRepository.flush();
         attachment.setMessage(message);
-        attachmentRepository.save(attachment);
+        attachmentRepository.saveAndFlush(attachment);
     }
 
     @Transactional(readOnly = true)

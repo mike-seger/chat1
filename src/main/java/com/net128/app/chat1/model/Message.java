@@ -2,6 +2,7 @@ package com.net128.app.chat1.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
@@ -43,7 +44,8 @@ public class Message extends Identifiable implements JsonObject<Message> {
     private String text;
 
     @Transient
-    @ApiModelProperty(value = "The 'content' of the message, All of its attributes are optional", position = -95)
+    @JsonUnwrapped
+    @ApiModelProperty(value = "The 'pay load' of the message. All of its attributes are optional", position = -95)
     private Payload payload;
 
     @Transient

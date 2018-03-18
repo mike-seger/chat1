@@ -2,6 +2,7 @@ package com.net128.app.chat1.controller;
 
 import com.net128.app.chat1.model.Attachment;
 import com.net128.app.chat1.model.Message;
+import com.net128.app.chat1.model.MessageDraft;
 import com.net128.app.chat1.service.MessageService;
 import com.net128.app.chat1.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -98,28 +99,29 @@ public class MessageController {
     }
 
     @ApiOperation(value = "Send a single message",
-        notes = "Send a single message. Recipient and payload are settable through the API. All other attributes are set by the server.",
+        notes = "Send a single message. The message information is posted in a message draft.",
         nickname = "sendMessage")
     @PostMapping(produces = "application/hal+json")
     public HttpEntity<Resource<Message>> sendMessage(
             HttpServletRequest request,
-            @RequestBody Message message) {
-        message = messageService.create(userService.getUserContext(request), message);
+            @RequestBody MessageDraft messageDraft) {
+        Message message = sendMessageJson(request, messageDraft);
         Resource<Message> resource = new Resource<>(message);
         resource.add(entityLinks.linkToSingleResource(Message.class, message.getId()).withSelfRel());
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 
+    @ApiOperation(value="", hidden = true)
     @PostMapping
     public Message sendMessageJson(
             HttpServletRequest request,
-            @RequestBody Message message) {
-       return messageService.create(userService.getUserContext(request), message);
+            @RequestBody MessageDraft messageDraft) {
+        return messageService.create(userService.getUserContext(request), messageDraft.toMessage());
     }
 
     @ApiOperation(value = "Get file content attached to a message",
-            notes = "Get file content attached to a message by message id. The binary content is returned  with the original file name and the determined content type.",
-            nickname = "getAttachment")
+        notes = "Get file content attached to a message by message id. The binary content is returned  with the original file name and the determined content type.",
+        nickname = "getAttachment")
     @GetMapping(value = "{messageId}/attachment")
     public void getAttachment(
             HttpServletRequest request,
