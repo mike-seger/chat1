@@ -14,27 +14,27 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.*;
 
 @Entity
 public class Message extends Identifiable implements JsonObject<Message> {
-    @JsonProperty(access = READ_ONLY)
-    @Column(nullable = false)
-    @ApiModelProperty(value = "The date the message was sent (set automatically)", position = 2, required = true)
-    private LocalDateTime sent;
-
-    @JsonProperty(access = READ_ONLY)
-    @ApiModelProperty(value = "The date the message was delivered (set automatically)", position = 3)
-    private LocalDateTime delivered;
-
     @NotNull
     @Column(length = 256, nullable = false)
     @Size(max = 256)
-    @ApiModelProperty(value = "The id of the sender (set automatically)", position = 4, required = true)
+    @ApiModelProperty(value = "The id of the sender (set automatically)", position = -99, required = true)
     private String senderId;
 
     @NotNull
     @Column(length = 256, nullable = false)
     @Size(max = 256)
     //@JsonProperty(access = WRITE_ONLY)
-    @ApiModelProperty(value = "The id of the recipient", position = 5, required = true)
+    @ApiModelProperty(value = "The id of the recipient", position = -98, required = true)
     private String recipientId;
+
+    @JsonProperty(access = READ_ONLY)
+    @Column(nullable = false)
+    @ApiModelProperty(value = "The date the message was sent (set automatically)", position = -97, required = true)
+    private LocalDateTime sent;
+
+    @JsonProperty(access = READ_ONLY)
+    @ApiModelProperty(value = "The date the message was delivered (set automatically)", position = -96)
+    private LocalDateTime delivered;
 
     @NotNull
     @JsonIgnore
@@ -43,7 +43,7 @@ public class Message extends Identifiable implements JsonObject<Message> {
     private String text;
 
     @Transient
-    @ApiModelProperty(value = "The 'content' of the message, All of its attributes are optional", position = 6)
+    @ApiModelProperty(value = "The 'content' of the message, All of its attributes are optional", position = -95)
     private Payload payload;
 
     @Transient

@@ -19,7 +19,7 @@ public class Identifiable {
     @JsonProperty(access = READ_ONLY)
     @Column(length = 32)
     @Size(max = 32)
-    @ApiModelProperty(value = "The unique id (uuid)", position = 1)
+    @ApiModelProperty(value = "The unique id (uuid)", position = -100, required = true)
     private String id;
 
     @PrePersist

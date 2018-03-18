@@ -1,9 +1,12 @@
 package com.net128.app.chat1.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
 @Entity
 public class Attachment extends Identifiable {
@@ -15,6 +18,7 @@ public class Attachment extends Identifiable {
     private byte [] data;
 
     private String fileName;
+    @JsonIgnore
     private String mimeType;
 
     public Attachment(){}
