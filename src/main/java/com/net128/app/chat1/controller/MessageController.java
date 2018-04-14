@@ -4,7 +4,6 @@ import com.net128.app.chat1.model.Attachment;
 import com.net128.app.chat1.model.Message;
 import com.net128.app.chat1.model.MessageDraft;
 import com.net128.app.chat1.service.MessageService;
-import com.net128.app.chat1.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.hateoas.EntityLinks;
@@ -15,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -30,9 +30,6 @@ import java.util.stream.Collectors;
 public class MessageController {
     @Inject
     private MessageService messageService;
-
-    @Inject
-    private UserService userService;
 
     @Inject
     private EntityLinks entityLinks;
@@ -71,8 +68,7 @@ public class MessageController {
             @RequestParam(name="nmax", required = false)
             Integer maxResults
     ){
-        List<Message> messages = messageService.findUserMessages(
-            userService.getUserContext(request), userId, startMessageId, maxResults);
+        List<Message> messages = messageService.findUserMessages(userId, startMessageId, maxResults);
         return messages;
     }
 
@@ -116,7 +112,22 @@ public class MessageController {
     public Message sendMessageJson(
             HttpServletRequest request,
             @RequestBody MessageDraft messageDraft) {
-        return messageService.create(userService.getUserContext(request), messageDraft.toMessage());
+        return messageService.create(messageDraft.toMessage());
+    }
+
+    @PostMapping(consumes = "multipart/form-data")
+    public Message sendMessageMultipart(
+            HttpServletRequest request,
+            @RequestParam(name="file") MultipartFile file,
+            @RequestParam(name="messageDraftJson") String messageDraftJson
+    ) throws IOException {
+        MessageDraft messageDraft=new MessageDraft().fromJson(messageDraftJson);
+        Message message= messageService.create(messageDraft.toMessage());
+        Attachment attachment=new Attachment();
+        attachment.setFileName(file.getOriginalFilename());
+        attachment.setData(file.getBytes());
+        putAttachment(request, message.getId(), attachment);
+        return message;
     }
 
     @ApiOperation(value = "Get file content attached to a message",
@@ -135,7 +146,7 @@ public class MessageController {
         if(message.getLength()>0) {
             response.setContentLength(message.getLength());
         }
-        messageService.streamAttachment(userService.getUserContext(request), messageId, stream);
+        messageService.streamAttachment(messageId, stream);
     }
 
     @ApiOperation(value = "Attach file content to a message",
@@ -146,7 +157,7 @@ public class MessageController {
             HttpServletRequest request,
             @PathVariable("messageId") String messageId,
             @RequestBody Attachment attachment) {
-        messageService.attach(userService.getUserContext(request), messageId, attachment);
+        messageService.attach(messageId, attachment);
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason="Message not found")
