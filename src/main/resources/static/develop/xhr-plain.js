@@ -25,6 +25,11 @@ window.addEventListener('load', function () {
   });
 
   function sendData() {
+     if(!file.binary && file.dom.files.length > 0) {
+       setTimeout(sendData, 100);
+       return;
+     }
+
     function createPart(boundary, name, content, contentType, fileName) {
       var part = "--" + boundary + "\r\n";
       part += 'content-disposition: form-data; name="' + name + '"';
@@ -38,14 +43,22 @@ window.addEventListener('load', function () {
     }
 
     var XHR = new XMLHttpRequest();
+
     var boundary = "-------------------------------part";
     var data = createPart(boundary, text.name, text.value, "application/json");
-
     if (file.dom.files[0]) {
       data += createPart(boundary, file.dom.name, file.binary, file.dom.files[0].type, file.dom.files[0].name);
     }
-
     data += "--" + boundary + "--";
+
+
+    XHR.upload.onprogress = function(e) {
+      if (e.lengthComputable) {
+        var percentComplete = (e.loaded / e.total) * 100;
+        console.log(percentComplete + '% uploaded');
+      }
+    };
+
     XHR.addEventListener('load', function(event) {
       alert('Yeah! Data sent and response loaded.');
     });
