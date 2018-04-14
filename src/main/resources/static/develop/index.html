@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <!--<script src="xhr-formdata.js"></script>-->
+    <script src="xhr-plain.js"></script>
 </head>
 <body>
-<form action="/messages" method="post" enctype="multipart/form-data">
-    <p><textarea rows="6" cols="80" name="messageDraftJson"
-    >{"recipientId":"string","text":"string","externalUri":"string"}</textarea></p>
-    <p><input type="file" name="file">
-    <p><button type="submit">Submit</button>
+
+<form id="myForm" action="/messages" enctype="multipart/form-data">
+    <p>
+        <label for="i1">text data:</label>
+        <textarea id="i1" cols="80" rows="6"
+            name="messageDraft">{"recipientId":"string","text":"string","externalUri":"string"}</textarea>
+    </p>
+    <p>
+        <label for="i2">file data:</label>
+        <input id="i2" name="file" type="file">
+    </p>
+    <button>Send Me!</button>
 </form>
 </body>
 </html>

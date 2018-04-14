@@ -4,21 +4,20 @@
 
 ### Endpoint Summary
 
-/messages
+/messages  
+/messages/{messageId}  
+/messages/{messageId}/attachment  
 
-/messages/{messageId}
+### Swagger
+[Swagger API Documentation](http://localhost:18090/swagger-ui.html)  
+[Swagger JSON](http://localhost:18090/v2/api-docs)  
+[Swagger yml](http://localhost:18090//swagger.yml)
 
-/messages/{messageId}/attachment
+## H2
+[H2 Console](http://localhost:18090/h2_console/)
 
-## Swagger API Documentation
-http://localhost:18090/swagger-ui.html
-### Swagger JSON
-http://localhost:18090/v2/api-docs
-### Swagger yml
-http://localhost:18090//swagger.yml
-
-## H2 Console
-http://localhost:18090/h2_console/
+## HTML pages
+[Messsa Upload](http://localhost:18090/develop/index.html)
 
 ## Curl examples
 ```

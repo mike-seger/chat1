@@ -16,9 +16,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests()
+        http.authorizeRequests()
+                .antMatchers(
+                        "/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger.yml",
+                        "/configuration/security",
+                        "/swagger-ui.html",
+                        "/swagger-ui.html#**",
+                        "/webjars/**",
+                        "/swagger-resources/**").permitAll()
                 .anyRequest().authenticated()
-                .antMatchers("/swagger**").permitAll()
                 .antMatchers("/h2_console/**").permitAll()
                 .and().httpBasic()
                 ;

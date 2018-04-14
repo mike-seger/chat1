@@ -5,7 +5,6 @@ import com.net128.app.chat1.model.Message;
 import com.net128.app.chat1.model.MessageDraft;
 import com.net128.app.chat1.service.MessageService;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Resource;
@@ -37,9 +36,8 @@ public class MessageController {
     @ApiOperation(value = "Get a list of messages",
         notes = "Get a list of messages, sorted by sent date, then message id. Several query parameters can be set to filter the list.",
         nickname = "getMessages")
-    @GetMapping(produces = "application/hal+json")
+    @GetMapping
     public HttpEntity<Resources<Resource<Message>>> getMessages(
-            HttpServletRequest request,
             @RequestParam(name="uid", required = false)
             String userId,
             @RequestParam(name="mid", required = false)
@@ -47,7 +45,7 @@ public class MessageController {
             @RequestParam(name="nmax", required = false)
             Integer maxResults
         ){
-        List<Message> messages = getMessagesJson(request, userId, startMessageId, maxResults);
+        List<Message> messages = messageService.findUserMessages(userId, startMessageId, maxResults);
         List<Resource<Message>> messageResources = messages.stream().map(m -> new Resource<>(m)).collect(Collectors.toList());
         messageResources.forEach(mr -> mr.add(entityLinks.linkToSingleResource(Message.class, mr.getContent().getId()).withSelfRel() ));
         Resources<Resource<Message>> resources = new Resources<>(messageResources);
@@ -55,87 +53,29 @@ public class MessageController {
         return new ResponseEntity<>(resources, HttpStatus.OK);
     }
 
-    @GetMapping(produces = "application/json")
-    public List<Message> getMessagesJson(
-            HttpServletRequest request,
-            @RequestParam(name="uid", required = false)
-            @ApiParam(value = "The user ID to search messages from")
-            String userId,
-            @RequestParam(name="mid", required = false)
-            @ApiParam(value = "The message ID to start from")
-            String startMessageId,
-            @ApiParam(value = "The maximum number of messages to return. Negative values mean 'back in time'")
-            @RequestParam(name="nmax", required = false)
-            Integer maxResults
-    ){
-        List<Message> messages = messageService.findUserMessages(userId, startMessageId, maxResults);
-        return messages;
-    }
-
-    @ApiOperation(value = "Get a single message",
-        notes = "Get a list of messages by message ID",
-        nickname = "getMessage")
-    @GetMapping(value = "{messageId}", produces = "application/hal+json")
-    public HttpEntity<Resource<Message>> getMessage(
-            @PathVariable("messageId") String messageId) {
-        Message message = getMessageJson(messageId);
-        Resource<Message> resource = new Resource<>(messageService.getMessage(messageId));
-        resource.add(entityLinks.linkToSingleResource(Message.class, message.getId()).withSelfRel());
-        return new ResponseEntity<>(resource, HttpStatus.OK);
-    }
-
-    @GetMapping(value = "{messageId}", produces = "application/json")
-    public Message getMessageJson(
-            @PathVariable("messageId") String messageId) {
-        Message message = messageService.getMessage(messageId);
-        if(message==null) {
-            throw new NotFoundException();
-        }
-        return message;
-    }
-
     @ApiOperation(value = "Send a single message",
         notes = "Send a single message. The message information is posted in a message draft.",
         nickname = "sendMessage")
-    @PostMapping(produces = "application/hal+json")
-    public HttpEntity<Resource<Message>> sendMessage(
-            HttpServletRequest request,
-            @RequestBody MessageDraft messageDraft) {
-        Message message = sendMessageJson(request, messageDraft);
-        Resource<Message> resource = new Resource<>(message);
-        resource.add(entityLinks.linkToSingleResource(Message.class, message.getId()).withSelfRel());
-        return new ResponseEntity<>(resource, HttpStatus.OK);
-    }
-
-    @ApiOperation(value="", hidden = true)
-    @PostMapping
-    public Message sendMessageJson(
-            HttpServletRequest request,
-            @RequestBody MessageDraft messageDraft) {
-        return messageService.create(messageDraft.toMessage());
-    }
-
     @PostMapping(consumes = "multipart/form-data")
-    public Message sendMessageMultipart(
-            HttpServletRequest request,
-            @RequestParam(name="file") MultipartFile file,
-            @RequestParam(name="messageDraftJson") String messageDraftJson
+    public Message sendMessage(
+            @RequestPart(name="file", required = false) MultipartFile file,
+            @RequestPart(name="messageDraft") MessageDraft messageDraft
     ) throws IOException {
-        MessageDraft messageDraft=new MessageDraft().fromJson(messageDraftJson);
         Message message= messageService.create(messageDraft.toMessage());
-        Attachment attachment=new Attachment();
-        attachment.setFileName(file.getOriginalFilename());
-        attachment.setData(file.getBytes());
-        putAttachment(request, message.getId(), attachment);
+        if(file!=null) {
+            Attachment attachment = new Attachment();
+            attachment.setFileName(file.getOriginalFilename());
+            attachment.setData(file.getBytes());
+            messageService.attach(message.getId(), attachment);
+        }
         return message;
     }
 
     @ApiOperation(value = "Get file content attached to a message",
         notes = "Get file content attached to a message by message id. The binary content is returned  with the original file name and the determined content type.",
         nickname = "getAttachment")
-    @GetMapping(value = "{messageId}/attachment")
+    @GetMapping("{messageId}/attachment")
     public void getAttachment(
-            HttpServletRequest request,
             @PathVariable("messageId") String messageId,
             HttpServletResponse response,
             OutputStream stream) throws IOException {
@@ -147,17 +87,6 @@ public class MessageController {
             response.setContentLength(message.getLength());
         }
         messageService.streamAttachment(messageId, stream);
-    }
-
-    @ApiOperation(value = "Attach file content to a message",
-        notes = "Attach file content to a message.",
-        nickname = "putAttachment")
-    @PutMapping(value = "{messageId}/attachment")
-    public void putAttachment(
-            HttpServletRequest request,
-            @PathVariable("messageId") String messageId,
-            @RequestBody Attachment attachment) {
-        messageService.attach(messageId, attachment);
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason="Message not found")

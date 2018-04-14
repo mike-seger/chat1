@@ -24,7 +24,6 @@ public class Message extends Identifiable implements JsonObject<Message> {
     @NotNull
     @Column(length = 256, nullable = false)
     @Size(max = 256)
-    //@JsonProperty(access = WRITE_ONLY)
     @ApiModelProperty(value = "The id of the recipient", position = -98, required = true)
     private String recipientId;
 
