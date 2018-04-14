@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +34,7 @@ public class MessageService {
 
     private @Value("${chat1.messages.repository.maxresults}") int maxResults;
 
-    public List<Message> findUserMessages(UserContext context, String userId, String aroundMessageId, Integer maxResults) {
+    public List<Message> findUserMessages(String userId, String aroundMessageId, Integer maxResults) {
         boolean sentBefore=false;
         if(maxResults==null) {
             maxResults=this.maxResults;
@@ -50,11 +52,12 @@ public class MessageService {
         return message;
     }
 
-    public Message create(UserContext context, Message message) {
+    public Message create(Message message) {
+        message.setSenderId(getUserDetails().getUsername());
         return repository.saveAndFlush(message);
     }
 
-    public void attach(UserContext context, String messageId, Attachment attachment) {
+    public void attach(String messageId, Attachment attachment) {
         Message message = repository.findOne(messageId);
         if(message==null) {
             return;
@@ -77,7 +80,7 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public void streamAttachment(UserContext context, String messageId, OutputStream outputStream) throws IOException {
+    public void streamAttachment(String messageId, OutputStream outputStream) throws IOException {
         Pageable singleResult = new PageRequest(0, 1);
         List<Attachment> attachments=attachmentRepository.findByMessage(repository.getOne(messageId), singleResult).getContent();
         if(attachments.size()>0) {
@@ -85,5 +88,11 @@ public class MessageService {
                 IOUtils.copy(is, outputStream);
             }
         }
+    }
+
+    private UserDetails getUserDetails() {
+        UserDetails userDetails =
+                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userDetails;
     }
 }

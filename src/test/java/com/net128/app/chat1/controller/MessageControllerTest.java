@@ -2,12 +2,10 @@ package com.net128.app.chat1.controller;
 
 import com.net128.app.chat1.model.Payload;
 import com.net128.app.chat1.model.Message;
-import com.net128.app.chat1.model.UserContext;
 import com.net128.app.chat1.service.MessageService;
 
 import java.util.Arrays;
 
-import com.net128.app.chat1.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -41,22 +39,14 @@ public class MessageControllerTest {
     @MockBean
     private MessageService messageService;
 
-    @MockBean
-    private UserService userService;
-
-    //TODO make tests parameterized with all elevations - affecting sender too
-    private final static UserContext userContext=new UserContext(false, "senderId");
-
     @Test
     @WithMockUser(username = "admin", password = "admin", roles = "ADMIN")
     public void shouldReturnAllMessages() throws Exception {
-        given(messageService.findUserMessages(userContext, null, null, null))
+        given(messageService.findUserMessages(null, null, null))
             .willReturn(Arrays.asList(
                     new Message("user1", "user2", new Payload("text1")),
                     new Message("user2", "user3", new Payload("text2"))
             ));
-
-        given(userService.getUserContext(Matchers.<HttpServletRequest>any())).willReturn(userContext);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Accept","application/json");
