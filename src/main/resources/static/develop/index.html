@@ -2,22 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <!--<script src="xhr-formdata.js"></script>-->
+    <style>
+        div {float:left;margin-right:20px;width:100%;}
+        input, label, textarea {display:block;}
+        label {padding-top: 5px;font-family: Sans-Serif;}
+        textarea {width:100%;height:150px;resize: vertical;}
+    </style>
+    <script src="ui.js"></script>
     <script src="xhr-plain.js"></script>
 </head>
 <body>
 
 <form id="myForm" action="/messages" enctype="multipart/form-data">
-    <p>
-        <label for="i1">text data:</label>
-        <textarea id="i1" cols="80" rows="6"
-            name="messageDraft">{"recipientId":"string","text":"string","externalUri":"string"}</textarea>
-    </p>
-    <p>
-        <label for="i2">file data:</label>
-        <input id="i2" name="file" type="file">
-    </p>
-    <button>Send Me!</button>
+    <div>
+        <label for="messageDraft">Message Draft</label>
+        <textarea id="messageDraft">
+            {"recipientId":"user","text":"Hello from user","externalUri":"http://abc.def.com/info"}
+        </textarea>
+    </div>
+    <div>
+        <label for="file">Attachment</label>
+        <input id="file" type="file">
+    </div>
+    <br style="clear:both;"/>
+    <br>
+    <button id="submit">Send</button>
+    <br>
+    <br>
+    <div>
+        <label for="result">Result</label>
+        <textarea id="result" readonly>
+        </textarea>
+    </div>
 </form>
 </body>
 </html>

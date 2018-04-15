@@ -67,7 +67,7 @@ public class MessageService {
             payload = new Payload();
         }
         attachment.setMimeType(MimeUtil.mimeType(attachment.getData()));
-        payload.attachmentInfo=new Payload.AttachmentInfo(attachment.getMimeType(), attachment.getFileName());
+        payload.attachmentInfo=new Payload.AttachmentInfo(attachment.getMimeType(), attachment.getFileName(), attachment.getData().length);
         message.setPayload(payload);
         message.setText(null);
         message.setLength(attachment.getData().length);

@@ -15,11 +15,14 @@ public class Payload implements JsonObject<Payload> {
         public String mimeType;
         @ApiModelProperty(value = "The file name of the uploaded file. This value is set by the API client when the file is attached.", readOnly = true)
         public String fileName;
+        @ApiModelProperty(value = "The size of the attached file content. This value is determined automatically.", readOnly = true)
+        public long size;
 
         public AttachmentInfo() {}
-        public AttachmentInfo(String mimeType, String fileName) {
+        public AttachmentInfo(String mimeType, String fileName, long size) {
             this.mimeType = mimeType;
             this.fileName = fileName;
+            this.size = size;
         }
     }
 
