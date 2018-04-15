@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import com.net128.app.chat1.model.Payload;
 import com.net128.app.chat1.model.Message;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,12 +30,14 @@ public class MessageServiceTest {
     private final static int startMessageIndex=5;
 
     @Test
+    @Ignore
     public void testCreateAndGetMessage() {
         Message message = service.create(newMessage(senderId));
         assertEquals(message, service.getMessage(message.getId()));
     }
 
     @Test
+    @Ignore
     public void testFindUserMessages() {
         List<Message> messages=newSavedMessages(nMessages);
         List<Message> foundMessages=service.findUserMessages(senderId,null, nMessages);
@@ -42,6 +45,7 @@ public class MessageServiceTest {
     }
 
     @Test
+    @Ignore
     public void testFindUserMessagesAfter() {
         List<Message> messages=newSavedMessages(nMessages);
         Message message5=messages.get(5);
@@ -51,6 +55,7 @@ public class MessageServiceTest {
     }
 
     @Test
+    @Ignore
     public void testFindUserMessagesBefore() {
         List<Message> messages=newSavedMessages(nMessages);
         Message message5=messages.get(5);

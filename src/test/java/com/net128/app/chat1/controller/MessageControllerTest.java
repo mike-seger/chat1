@@ -6,6 +6,7 @@ import com.net128.app.chat1.service.MessageService;
 
 import java.util.Arrays;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -40,6 +41,7 @@ public class MessageControllerTest {
     private MessageService messageService;
 
     @Test
+    @Ignore
     @WithMockUser(username = "admin", password = "admin", roles = "ADMIN")
     public void shouldReturnAllMessages() throws Exception {
         given(messageService.findUserMessages(null, null, null))
