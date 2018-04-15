@@ -67,7 +67,8 @@ window.addEventListener('load', function () {
       alert('Oops! Something went wrong.');
     });
 
-    XHR.open('POST', '/messages');
+    XHR.open('POST', '/messages', true);
+    XHR.setRequestHeader('Accept', 'application/json');
     XHR.setRequestHeader('Content-Type','multipart/form-data; boundary=' + boundary);
     XHR.send(data);
   }

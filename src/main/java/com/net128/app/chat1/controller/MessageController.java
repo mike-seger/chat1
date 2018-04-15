@@ -4,7 +4,10 @@ import com.net128.app.chat1.model.Attachment;
 import com.net128.app.chat1.model.Message;
 import com.net128.app.chat1.model.MessageDraft;
 import com.net128.app.chat1.service.MessageService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Resource;
@@ -56,8 +59,14 @@ public class MessageController {
         notes = "Send a single message. The message information is posted in a message draft.",
         nickname = "sendMessage")
     @PostMapping(consumes = "multipart/form-data")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="file", value = "file", dataType = "java.io.File", paramType = "form"),
+            @ApiImplicitParam(name="messageDraft", value = "the message draft", required = true, dataType = "com.net128.app.chat1.model.MessageDraft", paramType = "form")
+    })
     public Message sendMessage(
+            @ApiParam(hidden=true)
             @RequestPart(name="file", required = false) MultipartFile file,
+            @ApiParam(hidden=true)
             @RequestPart(name="messageDraft") MessageDraft messageDraft
     ) throws IOException {
         Message message= messageService.create(messageDraft.toMessage());
