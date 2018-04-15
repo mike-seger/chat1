@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -49,7 +50,6 @@ public class MessageController {
         ){
         List<Message> messages = messageService.findUserMessages(userId, startMessageId, maxResults);
         List<Resource<Message>> messageResources = messages.stream().map(m -> new Resource<>(m)).collect(Collectors.toList());
-        messageResources.forEach(mr -> mr.add(entityLinks.linkToSingleResource(Message.class, mr.getContent().getId()).withSelfRel() ));
         Resources<Resource<Message>> resources = new Resources<>(messageResources);
         resources.add(entityLinks.linkToCollectionResource(Message.class).withSelfRel());
         return new ResponseEntity<>(resources, HttpStatus.OK);
@@ -60,21 +60,22 @@ public class MessageController {
         nickname = "sendMessage")
     @PostMapping(consumes = "multipart/form-data")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="file", value = "file", dataType = "java.io.File", paramType = "form"),
-            @ApiImplicitParam(name="messageDraft", value = "the message draft", required = true, dataType = "com.net128.app.chat1.model.MessageDraft", paramType = "form")
+        @ApiImplicitParam(name="file", value = "file", dataType = "java.io.File", paramType = "form"),
+        @ApiImplicitParam(name="messageDraft", value = "the message draft", required = true, dataType = "com.net128.app.chat1.model.MessageDraft", paramType = "form")
     })
     public Message sendMessage(
-            @ApiParam(hidden=true)
-            @RequestPart(name="file", required = false) MultipartFile file,
-            @ApiParam(hidden=true)
-            @RequestPart(name="messageDraft") MessageDraft messageDraft
+            HttpServletRequest request,
+        @ApiParam(hidden=true)
+        @RequestPart(name="file", required = false) MultipartFile file,
+        @ApiParam(hidden=true)
+        @RequestPart(name="messageDraft") MessageDraft messageDraft
     ) throws IOException {
         Message message= messageService.create(messageDraft.toMessage());
         if(file!=null) {
             Attachment attachment = new Attachment();
             attachment.setFileName(file.getOriginalFilename());
             attachment.setData(file.getBytes());
-            messageService.attach(message.getId(), attachment);
+            message = messageService.attach(message.getId(), attachment);
         }
         return message;
     }

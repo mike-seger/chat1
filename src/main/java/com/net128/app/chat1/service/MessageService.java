@@ -57,10 +57,10 @@ public class MessageService {
         return repository.saveAndFlush(message);
     }
 
-    public void attach(String messageId, Attachment attachment) {
+    public Message attach(String messageId, Attachment attachment) {
         Message message = repository.findOne(messageId);
         if(message==null) {
-            return;
+            return null;
         }
         Payload payload = message.getPayload();
         if(payload ==null) {
@@ -77,6 +77,7 @@ public class MessageService {
         attachmentRepository.flush();
         attachment.setMessage(message);
         attachmentRepository.saveAndFlush(attachment);
+        return message;
     }
 
     @Transactional(readOnly = true)
