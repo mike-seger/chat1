@@ -1,5 +1,6 @@
 package com.net128.app.chat1.controller;
 
+import com.net128.app.chat1.model.Attachment;
 import com.net128.app.chat1.model.Payload;
 import com.net128.app.chat1.model.Message;
 import com.net128.app.chat1.service.MessageService;
@@ -22,8 +23,11 @@ public class MessageDevController {
         for(int i=0;i<n;i++) {
             char fromId=randomId(n);
             char toId=randomId(n);
-            messageService.create(new Message("TestUserID "+fromId,
+            Message message=messageService.create(new Message("TestUserID "+fromId,
                 "TestUserID "+toId, new Payload("Hello "+i)));
+            if(i%2==0) {
+                messageService.attach(message.getId(), new Attachment(message, ("Hello "+i+" from "+fromId).getBytes()));
+            }
         }
     }
 
