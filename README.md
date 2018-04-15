@@ -23,8 +23,6 @@
 ```
 curl http://user:password@localhost:18090/generate/10
 curl -s http://user:password@localhost:18090/messages | jq .
-ids=( $(curl -s  -H "Accept: application/json" http://user:password@localhost:18090/messages | jq -r .content[].id) )
-n=${#ids[1]}
-idnm2=${ids[0]}
-curl http://user:password@localhost:18090/messages/$idnm2/attachment
+ids=( $(curl -s  -H "Accept: application/json" http://user:password@localhost:18090/messages | jq -r '.content[]|select(.attachmentInfo) | .id') )
+curl http://user:password@localhost:18090/messages/${ids[0]}/attachment
 ```
