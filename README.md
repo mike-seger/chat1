@@ -17,7 +17,7 @@
 [H2 Console](http://localhost:18090/h2_console/)
 
 ## HTML pages
-[Messsa Upload](http://localhost:18090/develop/index.html)
+[Message Upload Example](http://localhost:18090/develop/index.html)
 
 ## Curl examples
 ```
