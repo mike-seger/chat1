@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class HttpLoggingFilter implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(HttpLoggingFilter.class);
@@ -108,11 +108,11 @@ public class HttpLoggingFilter implements Filter {
                 // Read InputStream and store its content in a buffer.
                 InputStream is = req.getInputStream();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                byte buf[] = new byte[1024];
-//                int read;
-//                while ((read = is.read(buf)) > 0) {
-//                    baos.write(buf, 0, read);
-//                }
+                byte buf[] = new byte[1024];
+                int read;
+                while ((read = is.read(buf)) > 0) {
+                    baos.write(buf, 0, read);
+                }
                 this.buffer = baos.toByteArray();
                 req.setAttribute(bufferName, this.buffer);
 

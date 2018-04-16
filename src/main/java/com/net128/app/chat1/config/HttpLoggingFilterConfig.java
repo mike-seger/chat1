@@ -39,17 +39,17 @@ public class HttpLoggingFilterConfig {
 //        return registrationBean;
 //    }
 
-//    @Bean
-//    public FilterRegistrationBean requestLogbookFilter() {
-//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-//        HttpLoggingFilter filter = new HttpLoggingFilter();
-//
-//        registrationBean.setFilter(filter);
-//        registrationBean.setOrder(Integer.MIN_VALUE);
-//        registrationBean.addUrlPatterns("/*");
-//        registrationBean.setDispatcherTypes(EnumSet.of(REQUEST, ASYNC, ERROR));
-//        return registrationBean;
-//    }
+    //@Bean
+    public FilterRegistrationBean requestLogbookFilter() {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+        HttpLoggingFilter filter = new HttpLoggingFilter();
+
+        registrationBean.setFilter(filter);
+        registrationBean.setOrder(Integer.MIN_VALUE);
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.setDispatcherTypes(EnumSet.of(REQUEST, ASYNC, ERROR));
+        return registrationBean;
+    }
 //
 //    @Bean
 //    public FilterRegistrationBean requestLogbookFilter() {
