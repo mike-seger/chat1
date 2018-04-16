@@ -6,7 +6,7 @@
 	<groupId>com.net128.app</groupId>
 	<artifactId>chat1</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>chat1</name>
 	<description>Chat project for Spring Boot</description>
@@ -46,6 +46,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
+			<!--&lt;!&ndash;<scope>provided</scope>&ndash;&gt;-->
+		<!--</dependency>-->
 
 		<!--<dependency>-->
 			<!--<groupId>org.zalando</groupId>-->

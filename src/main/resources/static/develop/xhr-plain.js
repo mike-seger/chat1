@@ -7,6 +7,7 @@ window.addEventListener('load', function () {
       };
   var result = document.getElementById('result');
   var messageDraft = document.getElementById('messageDraft');
+  var form = document.getElementById("form1");
 
   var reader = new FileReader();
 
@@ -73,7 +74,7 @@ window.addEventListener('load', function () {
         }
         data += "--" + boundary + "--";
 
-        XHR.open('POST', '/messages', true);
+        XHR.open('POST', form.action, true);
         XHR.setRequestHeader('Accept', 'application/json');
         XHR.setRequestHeader('Content-Type','multipart/form-data; boundary=' + boundary);
         XHR.send(data);
@@ -82,7 +83,6 @@ window.addEventListener('load', function () {
     multiPartRequest(xhr, text, file);
   }
 
-  var form = document.getElementById("myForm");
   var submit = document.getElementById("submit");
 
   form.addEventListener('submit', function (event) {

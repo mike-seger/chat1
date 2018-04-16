@@ -10,17 +10,26 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.paths.RelativePathProvider;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import javax.servlet.ServletContext;
 
 @Configuration
 @EnableSwagger2
 @Profile("dev")
 public class SwaggerConfig {
     @Bean
-    public Docket api() {
+    public Docket api(ServletContext servletContext) {
         return new Docket(DocumentationType.SWAGGER_2)
-            .apiInfo(new ApiInfo("Message Service", "This is the message service", "1.0", "http://termsofservice", null, "License", "http://licanse"))
+//                .pathProvider(new RelativePathProvider(servletContext) {
+//                    @Override
+//                    public String getApplicationBasePath() {
+//                        return "/";
+//                    }
+//                })
+                .apiInfo(new ApiInfo("Message Service", "This is the message service", "1.0", "http://termsofservice", null, "License", "http://licanse"))
             .select()
             .apis(RequestHandlerSelectors.any())
             //.apis(Predicates.not(RequestHandlerSelectors.basePackage(MessageDevController.class.getPackage().getName())))
