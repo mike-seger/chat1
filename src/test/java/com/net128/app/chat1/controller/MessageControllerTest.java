@@ -41,7 +41,6 @@ public class MessageControllerTest {
     private MessageService messageService;
 
     @Test
-    @Ignore
     @WithMockUser(username = "admin", password = "admin", roles = "ADMIN")
     public void shouldReturnAllMessages() throws Exception {
         given(messageService.findUserMessages(null, null, null))
@@ -56,13 +55,13 @@ public class MessageControllerTest {
         mvc.perform(get("/messages").headers(httpHeaders))
             .andExpect(status().isOk())
             .andExpect(content().contentType("application/json;charset=UTF-8"))
-            .andExpect(jsonPath("$", hasSize(2)))
-            .andExpect(jsonPath("$[0].senderId", is("user1")))
-            .andExpect(jsonPath("$[0].recipientId", is("user2")))
-            .andExpect(jsonPath("$[0].text", is("text1")))
-            .andExpect(jsonPath("$[1].senderId", is("user2")))
-            .andExpect(jsonPath("$[1].recipientId", is("user3")))
-            .andExpect(jsonPath("$[1].text", is("text2")))
+            .andExpect(jsonPath("$.content", hasSize(2)))
+            .andExpect(jsonPath("$.content[0].senderId", is("user1")))
+            .andExpect(jsonPath("$.content[0].recipientId", is("user2")))
+            .andExpect(jsonPath("$.content[0].text", is("text1")))
+            .andExpect(jsonPath("$.content[1].senderId", is("user2")))
+            .andExpect(jsonPath("$.content[1].recipientId", is("user3")))
+            .andExpect(jsonPath("$.content[1].text", is("text2")))
         ;
     }
 }

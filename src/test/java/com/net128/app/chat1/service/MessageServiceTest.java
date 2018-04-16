@@ -4,10 +4,16 @@ import static org.junit.Assert.*;
 
 import com.net128.app.chat1.model.Payload;
 import com.net128.app.chat1.model.Message;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,24 +26,32 @@ import java.util.List;
 @SpringBootTest
 @Rollback
 @Transactional
+@WithMockUser(username = "user", authorities = { "USER" })
 public class MessageServiceTest {
     @Inject
     private MessageService service;
 
-    private final static String senderId="senderId";
-    private final static String otherSenderId="senderId2";
+    private final static String senderId="user";
     private final static int nMessages=10;
     private final static int startMessageIndex=5;
 
     @Test
-    @Ignore
     public void testCreateAndGetMessage() {
-        Message message = service.create(newMessage(senderId));
-        assertEquals(message, service.getMessage(message.getId()));
+        Message message = newMessage(senderId);
+        Message messageSent = service.create(message);
+        assertEquals(messageSent, service.getMessage(messageSent.getId()));
     }
 
     @Test
-    @Ignore
+    public void testFindUserMessage() {
+        Message message = newMessage(senderId);
+        Message messageSent = service.create(message);
+        List<Message> foundMessages=service.findUserMessages(senderId,null, nMessages);
+        assertEquals(1, foundMessages.size());
+        assertEquals(messageSent, foundMessages.get(0));
+    }
+
+    @Test
     public void testFindUserMessages() {
         List<Message> messages=newSavedMessages(nMessages);
         List<Message> foundMessages=service.findUserMessages(senderId,null, nMessages);
@@ -45,32 +59,28 @@ public class MessageServiceTest {
     }
 
     @Test
-    @Ignore
     public void testFindUserMessagesAfter() {
         List<Message> messages=newSavedMessages(nMessages);
         Message message5=messages.get(5);
         List<Message> foundMessages=service.findUserMessages(senderId, message5.getId(), nMessages);
         assertEquals(messages.subList(startMessageIndex+1, nMessages), foundMessages);
-        assertEquals(2*nMessages, service.findUserMessages(null, null, null).size());
     }
 
     @Test
-    @Ignore
     public void testFindUserMessagesBefore() {
         List<Message> messages=newSavedMessages(nMessages);
         Message message5=messages.get(5);
         List<Message> foundMessages=service.findUserMessages(senderId, message5.getId(), -nMessages);
         assertEquals(messages.subList(0, startMessageIndex), foundMessages);
-        assertEquals(2*nMessages, service.findUserMessages(null, null, null).size());
     }
 
     private List<Message> newSavedMessages(int n) {
         List<Message> messages=new ArrayList<>();
-        long time=System.currentTimeMillis();
+        long time;
         while(n-->0) {
-            while(time==System.currentTimeMillis());
             messages.add(service.create(newMessage(senderId)));
-            service.create(newMessage(otherSenderId));
+            time=System.currentTimeMillis();
+            while(time==System.currentTimeMillis());
         }
         return messages;
     }
