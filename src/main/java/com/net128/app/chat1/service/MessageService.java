@@ -21,6 +21,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -43,7 +45,12 @@ public class MessageService {
             sentBefore=true;
         }
         Page<Message> messagePage=repository.findByUserIdAroundMessageId(userId, aroundMessageId, sentBefore, maxResults);
-        return messagePage.getContent();
+        List<Message> messages = messagePage.getContent();
+        if(sentBefore) {
+            messages=new ArrayList<>(messages);
+            Collections.reverse(messages);
+        }
+        return messages;
     }
 
     @Transactional(readOnly = true)
