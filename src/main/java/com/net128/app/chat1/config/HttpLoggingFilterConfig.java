@@ -1,18 +1,14 @@
 package com.net128.app.chat1.config;
 
 //import ch.qos.logback.access.servlet.TeeFilter;
+import com.net128.app.chat1.servlet.DoogiesRequestLogger;
 import com.net128.app.chat1.servlet.HttpLoggingFilter;
-import com.net128.app.chat1.util.servlet.filter.RequestLoggingFilter;
-import org.apache.catalina.filters.RequestDumperFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.filter.CommonsRequestLoggingFilter;
 //import org.zalando.logbook.Logbook;
 //import org.zalando.logbook.servlet.LogbookFilter;
 
-import javax.inject.Inject;
-import javax.servlet.*;
 import java.util.EnumSet;
 
 import static javax.servlet.DispatcherType.ASYNC;
@@ -27,7 +23,7 @@ public class HttpLoggingFilterConfig {
 //    @Bean
 //    public FilterRegistrationBean requestRequestLoggingFilter() {
 //        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-//        HttpLoggingFilter filter = new HttpLoggingFilter();
+//        HttpLoggingFilter3 filter = new HttpLoggingFilter3();
 //        registrationBean.setFilter(filter);
 //        registrationBean.setOrder(Integer.MIN_VALUE);
 //        registrationBean.addUrlPatterns("/*");
@@ -40,6 +36,30 @@ public class HttpLoggingFilterConfig {
 //        registrationBean.setFilter(filter);
 //        registrationBean.setOrder(Integer.MIN_VALUE);
 //        registrationBean.addUrlPatterns("/*");
+//        return registrationBean;
+//    }
+
+//    @Bean
+//    public FilterRegistrationBean requestLogbookFilter() {
+//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+//        HttpLoggingFilter filter = new HttpLoggingFilter();
+//
+//        registrationBean.setFilter(filter);
+//        registrationBean.setOrder(Integer.MIN_VALUE);
+//        registrationBean.addUrlPatterns("/*");
+//        registrationBean.setDispatcherTypes(EnumSet.of(REQUEST, ASYNC, ERROR));
+//        return registrationBean;
+//    }
+//
+//    @Bean
+//    public FilterRegistrationBean requestLogbookFilter() {
+//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+//        DoogiesRequestLogger filter = new DoogiesRequestLogger();
+//
+//        registrationBean.setFilter(filter);
+//        registrationBean.setOrder(Integer.MIN_VALUE);
+//        registrationBean.addUrlPatterns("/*");
+//        registrationBean.setDispatcherTypes(EnumSet.of(REQUEST, ASYNC, ERROR));
 //        return registrationBean;
 //    }
 
