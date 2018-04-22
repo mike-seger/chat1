@@ -45,10 +45,10 @@ public class TcpTunnelConfig {
             if(logger.isDebugEnabled()) {
                 byte [] data=new byte[count];
                 System.arraycopy(buffer,0,data,0, count);
-                logger.debug("{}:\n{}", message, Hexdump.escapeAsciiChars(data));
+                logger.debug("{} ASCII:\n{}", message, Hexdump.escapeAsciiChars(data));
                 if(logger.isTraceEnabled()) {
                     try {
-                        logger.trace("{} Dump:\n{}", message, Hexdump.toHexdump(data));
+                        logger.trace("{} HEX/ASCII Dump:\n{}", message, Hexdump.toHexdump(data));
                     } catch (Exception e) {
                         logger.error("Error logging content as hex dump.", e);
                     }

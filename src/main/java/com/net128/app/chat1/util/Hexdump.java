@@ -137,7 +137,7 @@ public class Hexdump {
     public static String escapeAsciiChars(final byte... bytes) {
         final StringBuilder buf = new StringBuilder();
         for (final byte b : bytes) {
-            if ((b >= 32 && b < 127) || b==9 || b==13) {
+            if ((b >= 32 && b < 127) || b==9 || b==10) {
                 buf.append(Character.toChars(b));
             }
         }
