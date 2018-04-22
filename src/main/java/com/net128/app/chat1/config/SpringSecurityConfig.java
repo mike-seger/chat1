@@ -15,6 +15,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${swagger.uris}")
     private String [] swaggerUris;
 
+    @Value("${open.endpoint.uris}")
+    private String [] openEndpointUris;
+
     @Value("${spring.h2.console.path}")
     private String h2ConsolePath;
 
@@ -22,6 +25,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(swaggerUris).permitAll()
+                .antMatchers(openEndpointUris).permitAll()
                 .anyRequest().authenticated()
                 .antMatchers(h2ConsolePath+"/**").permitAll()
                 .and().httpBasic()

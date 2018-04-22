@@ -8,6 +8,7 @@ import java.nio.ByteBuffer;
 
 public class Hexdump {
     private static final int ELEMENTS_PER_LINE = 16;
+    private final static String hexAsciiDelimiter="    ";
 
     public static String toHex(final ByteBuffer buffer) {
         final StringBuilder out = new StringBuilder();
@@ -78,6 +79,12 @@ public class Hexdump {
         hexdump(ByteBuffer.wrap(data), out);
     }
 
+    public static String hexdump(byte [] data) throws IOException {
+        final StringBuilder out = new StringBuilder();
+        hexdump(ByteBuffer.wrap(data), out);
+        return out.toString();
+    }
+
     public static String toHexdump(final ByteBuffer buffer) {
         final StringBuilder out = new StringBuilder();
         hexdump(buffer, out);
@@ -88,9 +95,12 @@ public class Hexdump {
         final int start = buffer.position();
         final int end = buffer.limit();
         for (int pos = 0; pos < end; pos += ELEMENTS_PER_LINE) {
-            out.append(String.format("%04X - ", pos));
+            out.append(String.format("%08X  ", pos));
             for (int i = 0; i < ELEMENTS_PER_LINE; ++i) {
                 final int idx = start + pos + i;
+                if(i==ELEMENTS_PER_LINE/2) {
+                    out.append(" ");
+                }
                 if (idx >= end) {
                     out.append("   ");
                 } else {
@@ -98,7 +108,7 @@ public class Hexdump {
                     out.append(String.format("%02X ", b));
                 }
             }
-            out.append("- ");
+            out.append(hexAsciiDelimiter);
             for (int i = 0; i < ELEMENTS_PER_LINE; ++i) {
                 final int idx = start + pos + i;
                 if (idx >= end) {
@@ -119,6 +129,16 @@ public class Hexdump {
                 buf.append(Character.toChars(b));
             } else {
                 buf.append('.');
+            }
+        }
+        return buf.toString();
+    }
+
+    public static String escapeAsciiChars(final byte... bytes) {
+        final StringBuilder buf = new StringBuilder();
+        for (final byte b : bytes) {
+            if ((b >= 32 && b < 127) || b==9 || b==13) {
+                buf.append(Character.toChars(b));
             }
         }
         return buf.toString();
