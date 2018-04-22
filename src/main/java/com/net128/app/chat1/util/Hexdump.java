@@ -111,6 +111,9 @@ public class Hexdump {
             out.append(hexAsciiDelimiter);
             for (int i = 0; i < ELEMENTS_PER_LINE; ++i) {
                 final int idx = start + pos + i;
+                if(i==ELEMENTS_PER_LINE/2) {
+                    out.append(" ");
+                }
                 if (idx >= end) {
                     out.append(" ");
                 } else {
