@@ -95,7 +95,7 @@ public class Hexdump {
         final int start = buffer.position();
         final int end = buffer.limit();
         for (int pos = 0; pos < end; pos += ELEMENTS_PER_LINE) {
-            out.append(String.format("%08X  ", pos));
+            out.append(String.format("%05X  ", pos));
             for (int i = 0; i < ELEMENTS_PER_LINE; ++i) {
                 final int idx = start + pos + i;
                 if(i==ELEMENTS_PER_LINE/2) {

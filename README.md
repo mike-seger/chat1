@@ -41,11 +41,7 @@ echo "{\"firstName\":\"John\",\"lastName\":\"Doe\"}" | gzip | \
     "http://localhost:18092/chat1/messages"
 
 # Send and trace messge using curl trace
-echo "{\"firstName\":\"John\",\"lastName\":\"Doe\"}" | gzip | \
-    curl -X POST -H "Accept: application/json" \
-    -F 'messageDraft={"recipientId":"user","text":"Hello from user","externalUri":"string"};type=application/json' \
-    -F "file=@-;filename=file.json.gz" \
-    --trace-ascii - "http://user:password@localhost:18090/chat1/messages"
+curl -X POST ... --trace-ascii - "http://localhost:18090/chat1/messages"
     
 # Send and trace messge using online service    
 curl -X POST .... https://httpbin.org/post
