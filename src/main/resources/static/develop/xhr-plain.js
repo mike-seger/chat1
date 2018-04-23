@@ -1,8 +1,5 @@
 window.addEventListener('load', function () {
 
-  var remoteServer = document.getElementById('remoteServer');
-  var username = document.getElementById('user');
-  var password = document.getElementById('password');
   var messageDraft = document.getElementById("messageDraft");
   var file = {
         dom    : document.getElementById("file"),
@@ -77,13 +74,9 @@ window.addEventListener('load', function () {
         data += "--" + boundary + "--";
 
         var action = form.action;
-        if(remoteServer.value.length > 0) {
-            action = remoteServer.value
-        }
         XHR.open('POST', action, true);
         XHR.setRequestHeader('Accept', 'application/json');
         XHR.setRequestHeader('Content-Type','multipart/form-data; boundary=' + boundary);
-        XHR.setRequestHeader("Authorization", "Basic " + btoa(username.value+":"+password.value));
         XHR.send(data);
     }
 

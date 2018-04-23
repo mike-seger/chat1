@@ -57,6 +57,7 @@ public class TcpTunnelConfig {
                 System.arraycopy(buffer,0,data,0, size);
                 StringBuilder sb=new StringBuilder();
                 sb.append(Hexdump.escapeAsciiChars(data));
+                sb.append("\n");
                 if(!logger.isTraceEnabled()) {
                     appendNotDumpedInfo(sb, size, count);
                 }

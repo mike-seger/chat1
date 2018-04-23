@@ -17,9 +17,9 @@ window.addEventListener('load', function () {
     }
     makePretty();
 
-    var messageUrl=window.location.href;
-    var remoteServer = document.getElementById('remoteServer');
-    remoteServer.value=messageUrl.replace(/develop.*/, 'messages');
+//    var messageUrl=window.location.href;
+//    var remoteServer = document.getElementById('remoteServer');
+//    remoteServer.value=messageUrl.replace(/develop.*/, 'messages');
 
     var submit = document.getElementById("submit");
     submit.addEventListener('click', function (event) {
