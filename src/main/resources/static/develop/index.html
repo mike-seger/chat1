@@ -4,9 +4,13 @@
     <meta charset="utf-8"/>
     <style>
         div {float:left;margin-bottom:10px;width:100%;}
-        input, label, textarea {display:block;}
+        xnput, label, textarea {display:block;}
         label {padding-top: 5px;font-family: Sans-Serif;}
         textarea {width:100%;height:150px;resize: vertical;}
+        label.inline, input.inline {
+          display: inline-block;
+        }​
+
     </style>
     <script src="ui.js"></script>
     <script src="xhr-plain.js"></script>
@@ -14,6 +18,14 @@
 <body>
 
 <form id="form1" action="../messages" enctype="multipart/form-data">
+    <div style="display: none;">
+        <label class="inline" for="remoteServer">URL</label>
+        <input class="inline" id="remoteServer" type="text" size="40" />
+        <label class="inline" for="user">User</label>
+        <input class="inline" id="user" type="text" size="9" value="user" />
+        <label class="inline" for="password">Password</label>
+        <input class="inline" id="password" type="text" size="9" value="password" />
+    </div>
     <div>
         <label for="messageDraft">Message Draft</label>
         <textarea id="messageDraft">

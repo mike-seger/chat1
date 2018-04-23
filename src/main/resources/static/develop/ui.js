@@ -16,6 +16,11 @@ window.addEventListener('load', function () {
         messageDraft.error = pretty.error;
     }
     makePretty();
+
+    var messageUrl=window.location.href;
+    var remoteServer = document.getElementById('remoteServer');
+    remoteServer.value=messageUrl.replace(/develop.*/, 'messages');
+
     var submit = document.getElementById("submit");
     submit.addEventListener('click', function (event) {
         event.preventDefault();

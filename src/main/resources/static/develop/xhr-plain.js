@@ -1,12 +1,14 @@
 window.addEventListener('load', function () {
 
-  var text = document.getElementById("messageDraft");
+  var remoteServer = document.getElementById('remoteServer');
+  var username = document.getElementById('user');
+  var password = document.getElementById('password');
+  var messageDraft = document.getElementById("messageDraft");
   var file = {
         dom    : document.getElementById("file"),
         binary : null
       };
   var result = document.getElementById('result');
-  var messageDraft = document.getElementById('messageDraft');
   var form = document.getElementById("form1");
 
   var reader = new FileReader();
@@ -54,7 +56,7 @@ window.addEventListener('load', function () {
       result.value = event;
     });
 
-    function multiPartRequest(XHR, text, file) {
+    function multiPartRequest(XHR, messageDraft, file) {
         function createPart(boundary, name, content, contentType, fileName) {
           var part = "--" + boundary + "\r\n";
           part += 'content-disposition: form-data; name="' + name + '";';
@@ -68,19 +70,24 @@ window.addEventListener('load', function () {
         }
 
         var boundary = "---part";
-        var data = createPart(boundary, text.id, text.value, "application/json");
+        var data = createPart(boundary, messageDraft.id, messageDraft.value, "application/json");
         if (file.dom.files[0]) {
           data += createPart(boundary, file.dom.id, file.binary, file.dom.files[0].type, file.dom.files[0].name);
         }
         data += "--" + boundary + "--";
 
-        XHR.open('POST', form.action, true);
+        var action = form.action;
+        if(remoteServer.value.length > 0) {
+            action = remoteServer.value
+        }
+        XHR.open('POST', action, true);
         XHR.setRequestHeader('Accept', 'application/json');
         XHR.setRequestHeader('Content-Type','multipart/form-data; boundary=' + boundary);
+        XHR.setRequestHeader("Authorization", "Basic " + btoa(username.value+":"+password.value));
         XHR.send(data);
     }
 
-    multiPartRequest(xhr, text, file);
+    multiPartRequest(xhr, messageDraft, file);
   }
 
   var submit = document.getElementById("submit");
