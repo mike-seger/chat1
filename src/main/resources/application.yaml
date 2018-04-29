@@ -1,0 +1,28 @@
+chat1:
+    messages:
+        repository:
+            maxresults: 50
+littleproxy:
+    enabled: false
+server:
+    context-path: /${spring.config.name}
+    servlet:
+        context-path: ''
+spring:
+    config:
+        name: chat1
+    hateoas:
+        use-hal-as-default-json-media-type: false
+    http:
+        multipart:
+            max-file-size: 100Mb
+            max-request-size: 100Mb
+    jackson:
+        default-property-inclusion: non_null
+        serialization:
+            WRITE_DATES_AS_TIMESTAMPS: false
+            fail-on-empty-beans: false
+    output:
+        ansi:
+            enabled: detect
+

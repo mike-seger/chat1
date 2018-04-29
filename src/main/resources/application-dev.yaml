@@ -1,0 +1,92 @@
+charon:
+    mappings:
+    -   destinations: http://localhost:18092/
+        name: charon sample 0
+        path: /charon0/
+    -   destinations: http://localhost:18092/
+        name: charon sample 1
+        path: /charon1/
+    tracing:
+        enabled: true
+hibernate:
+    dialect: org.hibernate.dialect.H2Dialect
+littleproxy:
+    enabled: false
+    request:
+        buffer-size: 10000000
+    response:
+        buffer-size: 10000000
+    server:
+        port: '#{ ${server.port} + 1 }'
+logging:
+    level:
+        com:
+            net128:
+                app:
+                    chat1:
+                        config:
+                            http: TRACE
+                        servlet: DEBUG
+        org:
+            hibernate: ERROR
+            hibernate.type.descriptor.sql: trace
+            springframework:
+                cloud:
+                    netflix:
+                        zuul: trace
+                web:
+                    filter:
+                        CommonsRequestLoggingFilter: TRACE
+            zalando:
+                logbook:
+                    Logbook: TRACE
+open:
+    endpoint:
+        uris: /hrrs,/hrrs/**
+proxy:
+    solr:
+        logging-enabled: true
+        proxy-path: ${server.context-path}/solr/*
+        target-url: http://localhost:${server.port}/
+server:
+    context-path: ''
+    port: 18090
+spring:
+    datasource:
+        password: ''
+        url: jdbc:h2:mem:chat1;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE
+        username: sa
+    h2:
+        console:
+            enabled: true
+            path: /develop/h2_console
+    jpa:
+        hibernate:
+            ddl-auto: create
+        properties:
+            hibernate:
+                format_sql: true
+        show-sql: true
+swagger:
+    uris: /v2/api-docs,/configuration/ui,/swagger.yml,/configuration/security,/swagger-ui.html,/swagger-ui.html#**,/webjars/**,/swagger-resources/**
+tcptunnel:
+    bufferSize: 16777216
+    enabled: true
+    maxDumpSize: 8192
+    server:
+        port: '#{ ${server.port} + 2 }'
+zuul:
+    debug:
+        request: true
+    forceOriginalQueryStringEncoding: true
+    include-debug-header: true
+    routes:
+        zuul1:
+            path: /zuul1/**
+            sensitiveHeaders: ''
+            url: http://localhost:18092
+        zuul2:
+            path: /zuul2/**
+            sensitiveHeaders: ''
+            url: http://localhost:18092
+
