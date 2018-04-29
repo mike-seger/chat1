@@ -58,8 +58,10 @@ tcptunnel:
     bufferSize: 16777216
     enabled: true
     maxDumpSize: 8192
-    server:
-        port: '#{ ${server.port} + 2 }'
+    tunnels:
+    -   port: 18092
+        remoteHost: localhost
+        remotePort: 18090
 charon:
     mappings:
     -   destinations: http://localhost:18092/

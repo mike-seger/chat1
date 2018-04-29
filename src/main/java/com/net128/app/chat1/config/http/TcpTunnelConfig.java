@@ -7,41 +7,35 @@ import net.kanstren.tcptunnel.observers.TCPObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.List;
 
 @Configuration
+@ConfigurationProperties(prefix = "tcptunnel")
 public class TcpTunnelConfig {
     private final static Logger logger = LoggerFactory.getLogger(TcpTunnelConfig.class);
 
-    @Value("${tcptunnel.enabled}")
     private boolean enabled;
-
-    @Value("${tcptunnel.server.port}")
-    private int tunnelPort;
-
-    @Value("${tcptunnel.bufferSize}")
     private int bufferSize;
-
-    @Value("${tcptunnel.maxDumpSize}")
     private int maxDumpSize;
-
-    @Value("${server.port}")
-    private int serverPort;
+    private List<Tunnel> tunnels;
 
     @PostConstruct
     private void init() {
-        String remoteHost="localhost";
-        Params params = new Params(tunnelPort, remoteHost, serverPort);
-        if(enabled) {
-            params.setBufferSize(bufferSize);
-            params.getUpObservers().add(new TcpDumpLogger("Request"));
-            params.getDownObservers().add(new TcpDumpLogger("Response"));
+        for(Tunnel tunnel : tunnels) {
+            Params params = new Params(tunnel.getPort(), tunnel.getRemoteHost(), tunnel.getRemotePort());
+            if (enabled) {
+                params.setBufferSize(bufferSize);
+                params.getUpObservers().add(new TcpDumpLogger("Request"));
+                params.getDownObservers().add(new TcpDumpLogger("Response"));
+            }
+            Main main = new Main(params);
+            main.start();
         }
-        Main main = new Main(params);
-        main.start();
     }
 
     private class TcpDumpLogger implements TCPObserver {
@@ -83,5 +77,67 @@ public class TcpTunnelConfig {
                 sb.append('\n');
             }
         }
+    }
+
+    public static class Tunnel {
+        private int port;
+        private int remotePort;
+        private String remoteHost;
+
+        public int getPort() {
+            return port;
+        }
+
+        public void setPort(int port) {
+            this.port = port;
+        }
+
+        public int getRemotePort() {
+            return remotePort;
+        }
+
+        public void setRemotePort(int remotePort) {
+            this.remotePort = remotePort;
+        }
+
+        public String getRemoteHost() {
+            return remoteHost;
+        }
+
+        public void setRemoteHost(String remoteHost) {
+            this.remoteHost = remoteHost;
+        }
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public int getBufferSize() {
+        return bufferSize;
+    }
+
+    public void setBufferSize(int bufferSize) {
+        this.bufferSize = bufferSize;
+    }
+
+    public int getMaxDumpSize() {
+        return maxDumpSize;
+    }
+
+    public void setMaxDumpSize(int maxDumpSize) {
+        this.maxDumpSize = maxDumpSize;
+    }
+
+    public List<Tunnel> getTunnels() {
+        return tunnels;
+    }
+
+    public void setTunnels(List<Tunnel> tunnels) {
+        this.tunnels = tunnels;
     }
 }
