@@ -62,6 +62,9 @@ tcptunnel:
     -   port: 18092
         remoteHost: localhost
         remotePort: 18090
+    -   port: 18093
+        remoteHost: www.switch.ch
+        remotePort: 80
 charon:
     mappings:
     -   destinations: http://localhost:18092/
