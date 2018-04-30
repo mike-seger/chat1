@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 
@@ -21,6 +20,7 @@ public interface JsonObject<T> {
             throw new RuntimeException("Cannot convert to Json", e);
         }
     }
+    @SuppressWarnings("unchecked")
     default T fromJson(String json) {
         try {
             mapper.readerForUpdating(this).readValue(json);

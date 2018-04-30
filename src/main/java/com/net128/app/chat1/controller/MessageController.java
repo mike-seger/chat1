@@ -99,5 +99,6 @@ public class MessageController {
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason="Message not found")
+    @SuppressWarnings("serial")
     public class NotFoundException extends RuntimeException {}
 }

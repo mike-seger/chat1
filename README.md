@@ -33,20 +33,20 @@ ids=( $(curl -s  -H "Accept: application/json" http://user:password@localhost:18
 # get an attachment
 curl http://user:password@localhost:18090/chat1/messages/${ids[0]}/attachment
 
-# Send and trace messge using built-in tcp tunnel
+# Send and trace message using built-in tcp tunnel on port 18092
 echo "{\"firstName\":\"John\",\"lastName\":\"Doe\"}" | gzip | \
     curl -X POST -H "Accept: application/json" \
     -F 'messageDraft={"recipientId":"user","text":"Hello from user","externalUri":"string"};type=application/json' \
     -F "file=@-;filename=file.json.gz" -u user:password \
-    "http://localhost:18092/chat1/messages"
+    "http://localhost:18092/messages"
 
-# Send and trace messge using curl trace
+# Send and trace message using curl trace
 curl -X POST ... --trace-ascii - "http://localhost:18090/chat1/messages"
     
-# Send and trace messge using online service    
+# Send and trace message using online service    
 curl -X POST .... https://httpbin.org/post
 
-# Send and trace messge using netcat
+# Send and trace message using netcat
 nc -l 18080 &
-curl -X POST ... "http://user:password@localhost:18100/messages"
+curl -X POST ... "http://user:password@localhost:18080/messages"
 ```

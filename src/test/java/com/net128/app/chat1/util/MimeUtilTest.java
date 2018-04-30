@@ -1,6 +1,5 @@
 package com.net128.app.chat1.util;
 
-import com.net128.app.chat1.model.JsonObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

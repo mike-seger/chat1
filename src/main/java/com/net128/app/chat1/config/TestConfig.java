@@ -4,8 +4,6 @@ import com.net128.app.chat1.model.JsonObject;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
-
 @Configuration
 @ConfigurationProperties(prefix = "testconfig")
 public class TestConfig implements JsonObject<TestConfig> {
