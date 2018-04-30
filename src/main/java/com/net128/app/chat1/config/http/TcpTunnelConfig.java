@@ -39,7 +39,7 @@ public class TcpTunnelConfig {
 
     private class TcpDumpLogger implements TCPObserver {
         private String message;
-        public TcpDumpLogger(String message) {
+        private TcpDumpLogger(String message) {
             this.message=message;
         }
         @Override

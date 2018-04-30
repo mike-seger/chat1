@@ -9,23 +9,23 @@
 /messages/{messageId}/attachment  
 
 ### Swagger
-[Swagger API Documentation](http://localhost:18090/chat1/swagger-ui.html)  
-[Swagger JSON](http://localhost:18090/chat1/v2/api-docs)  
-[Swagger yml](http://localhost:18090/chat1//swagger.yml)
+[Swagger API Documentation](http://localhost:18090/swagger-ui.html)  
+[Swagger JSON](http://localhost:18090/develop/v2/api-docs)  
+[Swagger yml](http://localhost:18090/develop//swagger.yml)
 
 ## H2
-[H2 Console](http://localhost:18090/chat1/h2_console/)
+[H2 Console](http://localhost:18090/develop/h2_console/)
 
 ## HTML pages
-[Message Upload Example](http://localhost:18090/chat1/develop/index.html)
+[Message Upload Example](http://localhost:18090/develop/index.html)
 
 ## Curl examples
 ```
 # generate 10 messages
-curl http://user:password@localhost:18090/chat1/generate/10
+curl http://user:password@localhost:18090/generate/10
 
 # list all mesaages
-curl -s http://user:password@localhost:18090/chat1/messages | jq .
+curl -s http://user:password@localhost:18090/messages | jq .
 
 # get an array of all message ids
 ids=( $(curl -s  -H "Accept: application/json" http://user:password@localhost:18090/chat1/messages | jq -r '.content[]|select(.attachmentInfo) | .id') )
@@ -41,7 +41,7 @@ echo "{\"firstName\":\"John\",\"lastName\":\"Doe\"}" | gzip | \
     "http://localhost:18092/messages"
 
 # Send and trace message using curl trace
-curl -X POST ... --trace-ascii - "http://localhost:18090/chat1/messages"
+curl -X POST ... --trace-ascii - "http://localhost:18090/messages"
     
 # Send and trace message using online service    
 curl -X POST .... https://httpbin.org/post

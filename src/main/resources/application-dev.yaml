@@ -34,10 +34,10 @@ logging:
                 app:
                     chat1:
                         config:
-                            http: TRACE
-                        servlet: DEBUG
+                            http: trace
+                        servlet: debug
         org:
-            hibernate: ERROR
+            hibernate: error
             hibernate.type.descriptor.sql: trace
             springframework:
                 cloud:
@@ -45,10 +45,10 @@ logging:
                         zuul: trace
                 web:
                     filter:
-                        CommonsRequestLoggingFilter: TRACE
+                        CommonsRequestLoggingFilter: trace
             zalando:
                 logbook:
-                    Logbook: TRACE
+                    Logbook: trace
 open:
     endpoint:
         uris: /hrrs, /hrrs/**

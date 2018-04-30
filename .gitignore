@@ -28,4 +28,9 @@ nbdist/
 
 .DS_Store
 *~
-/config
+
+### Ignored local configs (all profiled) 
+/config/*
+!/config/application.yaml
+!/config/application.properties
+
