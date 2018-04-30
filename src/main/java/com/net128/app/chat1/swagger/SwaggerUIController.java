@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Profile("dev")
 public class SwaggerUIController {
     private static Logger logger = LoggerFactory.getLogger(SwaggerUIController.class);
-    public static final String APPLICATION_YML_VALUE = "application/yaml";
+    public static final String APPLICATION_YML_VALUE = "text/yaml";
 
     @Autowired
     private SwaggerUIService service;

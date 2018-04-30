@@ -4,8 +4,8 @@ server:
 spring:
     datasource:
         password: ''
-        url: jdbc:h2:mem:chat1;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE
         username: sa
+        url: jdbc:h2:mem:chat1;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE
     h2:
         console:
             enabled: true
@@ -53,7 +53,7 @@ open:
     endpoint:
         uris: /hrrs, /hrrs/**
 swagger:
-    uris: /v2/api-docs,/configuration/ui,/swagger.yml,/configuration/security,/swagger-ui.html,/swagger-ui.html#**,/webjars/**,/swagger-resources/**
+    uris: /v2/api-docs,/configuration/**,/swagger.yml,/swagger-ui.html,/swagger-ui.html#**,/webjars/**,/swagger-resources/**
 tcptunnel:
     bufferSize: 16777216
     enabled: true
