@@ -1,0 +1,40 @@
+spring:
+    datasource:
+        url: jdbc:h2:~/h2/chat1;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+    output:
+        ansi:
+            enabled : always
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: false
+tcptunnel:
+    enabled: false
+charon:
+    tracing:
+        enabled: false
+proxy:
+    solr:
+        logging-enabled: false
+logging:
+    level:
+        com:
+            net128:
+                app:
+                    chat1:
+                        config:
+                            http: error
+                        servlet: error
+        org:
+            hibernate:
+                type:
+                    descriptor:
+                        sql: error
+            springframework:
+                cloud:
+                    netflix:
+                        zuul:
+                            web: error
+                web:
+                    filter:
+                        CommonsRequestLoggingFilter: error
