@@ -2,15 +2,46 @@ chat1:
     messages:
         repository:
             maxresults: 50
+hibernate:
+    ejb:
+        entitymanager_factory_name: ${spring.config.name}
 littleproxy:
     enabled: false
+logging:
+    logging.level.root: OFF
+    level:
+        com:
+            github:
+                mkopylec:
+                    charon: warn
+            netflix: warn
+            netflix.config.sources.URLConfigurationSource: error
+            net128.app.chat1: warn
+            net128.app.chat1.config:
+                http: trace
+                PropertiesDumper: debug
+            net128.app.chat1.servlet: debug
+            net128.app.chat1.Chat1Application: warn
+        org:
+            apache:
+                catalina: warn
+            hibernate: warn
+            hibernate.type.descriptor.sql: warn
+            springframework: warn
+            springframework.jmx.export.annotation.AnnotationMBeanExporter: error
+            springframework.boot:
+                context.embedded.tomcat.TomcatEmbeddedServletContainer: info
+            reflections: warn
+        springfox: warn
 server:
-    context-path: /${spring.config.name}
+    context-path: /${spring.application.name}
     servlet:
         context-path: ''
 spring:
-    config:
+    application:
         name: chat1
+    config:
+        name: ${spring.application.name}
     hateoas:
         use-hal-as-default-json-media-type: false
     http:

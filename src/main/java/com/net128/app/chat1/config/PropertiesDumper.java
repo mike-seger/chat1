@@ -29,13 +29,13 @@ import org.springframework.core.env.StandardEnvironment;
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.skjolber.jackson.jsh.SyntaxHighlightingJsonGenerator;
 
 @Configuration
 public class PropertiesDumper {
-    private static final Logger LOG = LoggerFactory.getLogger(PropertiesDumper.class);
+    private static final Logger logger = LoggerFactory.getLogger(PropertiesDumper.class);
+    private final static int debugValueLength = 40;
 
     private final ConfigurableEnvironment environment;
     private Set<String> propertyKeys;
@@ -49,20 +49,20 @@ public class PropertiesDumper {
     @PostConstruct
     public void dumpEnvironment() {
         try {
-            if (LOG.isInfoEnabled()) {
+            if (logger.isDebugEnabled()) {
                 propertyKeys = new HashSet<>();
                 Map<String, Object> environmentMap = environmentMap(propertyKeys);
-                LOG.debug("PROPERTY DUMP environment: {}", toJson(environmentMap, LOG.isDebugEnabled()));
+                logger.trace("PROPERTY DUMP environment: {}", toJson(environmentMap, logger.isDebugEnabled()));
             }
         } catch (RuntimeException e) {
-            LOG.error("Dump failed.", e);
+            logger.error("Dump failed.", e);
         }
     }
 
     @EventListener({ ContextRefreshedEvent.class })
     public void dumpResolvedProperties() {
         try {
-            if (LOG.isInfoEnabled()) {
+            if (logger.isDebugEnabled()) {
                 if (propertyKeys != null) {
                     SortedMap<String, String> resolvedProperties = new TreeMap<>();
                     for (String key : propertyKeys) {
@@ -76,16 +76,16 @@ public class PropertiesDumper {
                                 value = "[Unconvertable value]";
                             }
                         }
-                        if (key.toLowerCase().endsWith("path") && value.length() > 50 && !LOG.isDebugEnabled()) {
-                            value = value.substring(0, 50) + "...";
+                        if (key.toLowerCase().endsWith("path") && value.length() > debugValueLength && !logger.isTraceEnabled()) {
+                            value = value.substring(0, debugValueLength) + "...";
                         }
                         resolvedProperties.put(key, value);
                     }
-                    LOG.info("PROPERTY DUMP resolved properties: {}", toJson(resolvedProperties, true));
+                    logger.debug("PROPERTY DUMP resolved properties: {}", toJson(resolvedProperties, true));
                 }
             }
         } catch (RuntimeException e) {
-            LOG.error("Dump failed", e);
+            logger.error("Dump failed", e);
         }
     }
 
@@ -102,7 +102,7 @@ public class PropertiesDumper {
                     try {
                         properties.put(name, sanitize(name, enumerable.getProperty(name)));
                     } catch (RuntimeException e) {
-                        LOG.error("problem with property {}", name);
+                        logger.error("problem with property {}", name);
                     }
                 }
                 result.put(sourceName, properties);
@@ -166,7 +166,7 @@ public class PropertiesDumper {
                 return om.writerWithDefaultPrettyPrinter().writeValueAsString(o);
             }
         } catch (Exception e) {
-            LOG.error("Failed to serialize object", e);
+            logger.error("Failed to serialize object", e);
             return "";
         }
     }

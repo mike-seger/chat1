@@ -5,10 +5,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import javax.inject.Inject;
 
 @Configuration
+@Profile("dev")
 public class SolrProxyServletConfiguration {
     @Inject
     private SolrProxyConfig solrProxyConfig;

@@ -1,0 +1,23 @@
+chat1:
+    userconfig:
+        users:
+        -   name: user
+            password: password
+            role: USER
+logging:
+    level:
+        com.net128.app.chat1.config.PropertiesDumper: warn
+        org:
+            springframework.beans.factory.support.DisposableBeanAdapter: error
+            hibernate.jpa.internal.EntityManagerFactoryRegistry: error
+spring:
+    autoconfigure:
+        exclude: >
+            com.github.mkopylec.charon.configuration.CharonConfiguration,
+            org.springframework.cloud.netflix.zuul.ZuulProxyAutoConfiguration,
+            org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration
+    datasource:
+        url: jdbc:h2:mem:chat1;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE
+        jpa:
+            hibernate:
+                ddl-auto: create

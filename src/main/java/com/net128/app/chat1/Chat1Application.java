@@ -10,7 +10,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EntityScan(
     basePackageClasses = { Chat1Application.class, Jsr310JpaConverters.class }
 )
-@EnableSwagger2
 @EnableZuulProxy
 @SpringBootApplication
 public class Chat1Application {

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Configuration
 @ConfigurationProperties(prefix = "tcptunnel")
+@Profile("dev")
 public class TcpTunnelConfig {
     private final static Logger logger = LoggerFactory.getLogger(TcpTunnelConfig.class);
 

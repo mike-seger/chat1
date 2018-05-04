@@ -5,50 +5,31 @@ spring:
     datasource:
         password: ''
         username: sa
-        url: jdbc:h2:mem:chat1;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE
+        url: jdbc:h2:~/h2/chat1;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
     h2:
         console:
             enabled: true
             path: /develop/h2_console
     jpa:
         hibernate:
-            ddl-auto: create
+            ddl-auto: update
         properties:
             hibernate:
                 format_sql: true
         show-sql: true
+    output:
+        ansi:
+            enabled : always
 hibernate:
     dialect: org.hibernate.dialect.H2Dialect
-littleproxy:
-    enabled: false
-    request:
-        buffer-size: 10000000
-    response:
-        buffer-size: 10000000
-    server:
-        port: '#{ ${server.port} + 1 }'
-logging:
-    level:
-        com:
-            net128:
-                app:
-                    chat1:
-                        config:
-                            http: trace
-                        servlet: debug
-        org:
-            hibernate: error
-            hibernate.type.descriptor.sql: trace
-            springframework:
-                cloud:
-                    netflix:
-                        zuul: trace
-                web:
-                    filter:
-                        CommonsRequestLoggingFilter: trace
-            zalando:
-                logbook:
-                    Logbook: trace
+#            springframework:
+#                cloud:
+#                    netflix:
+#                        zuul: trace
+#                web:
+#                    filter:
+#                        CommonsRequestLoggingFilter: trace
+
 open:
     endpoint:
         uris: /hrrs, /hrrs/**
@@ -74,10 +55,10 @@ charon:
         name: charon sample 1
         path: /charon1/
     tracing:
-        enabled: true
+        enabled: false
 proxy:
     solr:
-        logging-enabled: true
+        logging-enabled: false
         proxy-path: ${server.context-path}/solr/*
         target-url: http://localhost:${server.port}/
 zuul:
@@ -94,4 +75,23 @@ zuul:
             path: /zuul2/**
             sensitiveHeaders: ''
             url: http://localhost:18092
-
+littleproxy:
+    enabled: false
+    request:
+        buffer-size: 10000000
+    response:
+        buffer-size: 10000000
+    server:
+        port: '#{ ${server.port} + 1 }'
+chat1:
+    userconfig:
+        users:
+        -   name: user1
+            password: password1
+            role: USER
+        -   name: user2
+            password: password2
+            role: USER
+        -   name: admin
+            password: admin
+            role: ADMIN,ACTUATOR
