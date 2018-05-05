@@ -14,7 +14,7 @@ import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 @Service
-@Profile("dev")
+@Profile("local")
 public class SwaggerUIService {
 
     @Autowired

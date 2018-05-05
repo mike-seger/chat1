@@ -17,7 +17,7 @@ import javax.servlet.ServletContext;
 
 @Configuration
 @EnableSwagger2
-@Profile("dev")
+@Profile("local")
 public class SwaggerConfig {
     @Bean
     public Docket api(ServletContext servletContext) {

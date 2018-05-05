@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@Profile("dev")
+@Profile("local")
 public class SwaggerUIController {
     private static Logger logger = LoggerFactory.getLogger(SwaggerUIController.class);
     public static final String APPLICATION_YML_VALUE = "text/yaml";

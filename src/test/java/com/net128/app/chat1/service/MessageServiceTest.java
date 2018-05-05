@@ -2,6 +2,7 @@ package com.net128.app.chat1.service;
 
 import static org.junit.Assert.*;
 
+import com.net128.app.chat1.common.CommonSpringTest;
 import com.net128.app.chat1.model.Payload;
 import com.net128.app.chat1.model.Message;
 import org.junit.Test;
@@ -9,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +19,10 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("test")
 @Rollback
 @Transactional
 @WithMockUser(username = "user", authorities = { "USER" })
-public class MessageServiceTest {
+public class MessageServiceTest implements CommonSpringTest {
     @Inject
     private MessageService service;
 

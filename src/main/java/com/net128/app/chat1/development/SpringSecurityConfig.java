@@ -1,4 +1,4 @@
-package com.net128.app.chat1.config;
+package com.net128.app.chat1.development;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 
 @Configuration
 @EnableWebSecurity
-@Profile({"dev", "test"})
+@Profile({"local", "test"})
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${swagger.uris:}")
     private String [] swaggerUris;

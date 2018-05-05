@@ -6,7 +6,7 @@ chat1:
             role: USER
 logging:
     level:
-        com.net128.app.chat1.config.PropertiesDumper: warn
+        com.net128.app.chat1.config.PropertiesDumper: info
         org:
             springframework.beans.factory.support.DisposableBeanAdapter: error
             hibernate.jpa.internal.EntityManagerFactoryRegistry: error
@@ -21,3 +21,5 @@ spring:
         jpa:
             hibernate:
                 ddl-auto: create
+    main:
+        banner-mode: "off"

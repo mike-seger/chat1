@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Profile;
 import javax.annotation.PostConstruct;
 
 @Configuration
-@Profile("dev")
+@Profile("local")
 public class LittleProxyConfig {
 
     private final static Logger logger = LoggerFactory.getLogger(LittleProxyConfig.class);

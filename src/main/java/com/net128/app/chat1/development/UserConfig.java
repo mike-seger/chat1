@@ -1,4 +1,4 @@
-package com.net128.app.chat1.config;
+package com.net128.app.chat1.development;
 
 import com.net128.app.chat1.model.JsonObject;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -9,12 +9,12 @@ import java.util.List;
 
 @Configuration
 @ConfigurationProperties(prefix = "chat1.userconfig")
-@Profile({"dev", "test"})
+@Profile({"local", "test"})
 public class UserConfig {
     public static class User implements JsonObject<UserConfig> {
-        public String name;
-        public String password;
-        public String role;
+        private String name;
+        private String password;
+        private String role;
 
         public void setName(String name) {
             this.name = name;

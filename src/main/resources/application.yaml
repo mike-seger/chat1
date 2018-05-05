@@ -5,10 +5,7 @@ chat1:
 hibernate:
     ejb:
         entitymanager_factory_name: ${spring.config.name}
-littleproxy:
-    enabled: false
 logging:
-    logging.level.root: OFF
     level:
         com:
             github:
@@ -44,10 +41,14 @@ spring:
         name: ${spring.application.name}
     hateoas:
         use-hal-as-default-json-media-type: false
+    h2.console.enabled: false
+    Multipart: &multipart
+        max-file-size: 104857600
+        max-request-size: '${spring.Multipart.max-file-size}'
     http:
-        multipart:
-            max-file-size: 100Mb
-            max-request-size: 100Mb
+        <<: *multipart
+    servlet:
+        <<: *multipart
     jackson:
         default-property-inclusion: non_null
         serialization:
@@ -56,4 +57,13 @@ spring:
     output:
         ansi:
             enabled: detect
+    autoconfigure:
+        exclude: >
+            com.github.mkopylec.charon.configuration.CharonConfiguration,
+            org.springframework.cloud.netflix.zuul.ZuulProxyAutoConfiguration,
+            org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration.
+            org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration,
+            org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,
+            org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
 

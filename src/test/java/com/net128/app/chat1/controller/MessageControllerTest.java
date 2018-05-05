@@ -1,5 +1,6 @@
 package com.net128.app.chat1.controller;
 
+import com.net128.app.chat1.common.CommonSpringTest;
 import com.net128.app.chat1.model.Payload;
 import com.net128.app.chat1.model.Message;
 import com.net128.app.chat1.service.MessageService;
@@ -15,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -29,8 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
-@ActiveProfiles("test")
-public class MessageControllerTest {
+public class MessageControllerTest implements CommonSpringTest {
 
     @Autowired
     private MockMvc mvc;

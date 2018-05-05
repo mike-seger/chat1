@@ -52,7 +52,7 @@ public class PropertiesDumper {
             if (logger.isDebugEnabled()) {
                 propertyKeys = new HashSet<>();
                 Map<String, Object> environmentMap = environmentMap(propertyKeys);
-                logger.trace("PROPERTY DUMP environment: {}", toJson(environmentMap, logger.isDebugEnabled()));
+                logger.trace("PROPERTY DUMP environment:\n{}\n", toJson(environmentMap, logger.isDebugEnabled()));
             }
         } catch (RuntimeException e) {
             logger.error("Dump failed.", e);
@@ -81,7 +81,7 @@ public class PropertiesDumper {
                         }
                         resolvedProperties.put(key, value);
                     }
-                    logger.debug("PROPERTY DUMP resolved properties: {}", toJson(resolvedProperties, true));
+                    logger.debug("PROPERTY DUMP resolved properties:\n{}", toJson(resolvedProperties, true));
                 }
             }
         } catch (RuntimeException e) {
@@ -150,16 +150,17 @@ public class PropertiesDumper {
             JsonGenerator delegate = jsonFactory.createGenerator(baos, JsonEncoding.UTF8);
             SyntaxHighlighter highlighter = DefaultSyntaxHighlighter
                 .newBuilder()
-                .withField(AnsiSyntaxHighlight.GREEN)
-                .withString(AnsiSyntaxHighlight.CYAN)
+                .withField(AnsiSyntaxHighlightIntense.BLUE)
+                .withString(AnsiSyntaxHighlightIntense.YELLOW)
                 .withNumber(AnsiSyntaxHighlight.MAGENTA)
-                .withCurlyBrackets(AnsiSyntaxHighlight.MAGENTA)
-                .withComma(AnsiSyntaxHighlight.BLUE)
-                .withColon(AnsiSyntaxHighlight.BLUE)
+                .withCurlyBrackets(AnsiSyntaxHighlight.CYAN)
+                .withComma(AnsiSyntaxHighlight.WHITE)
+                .withColon(AnsiSyntaxHighlight.WHITE)
                 .build();
             try (JsonGenerator jsonGenerator = new SyntaxHighlightingJsonGenerator(delegate, highlighter)) {
                 jsonGenerator.setCodec(om);
                 jsonGenerator.writeObject(o);
+                baos.write(AnsiSyntaxHighlight.RESET.getBytes());
                 String result = baos.toString();
                 return result;
             } catch(Exception e) {
@@ -169,5 +170,16 @@ public class PropertiesDumper {
             logger.error("Failed to serialize object", e);
             return "";
         }
+    }
+
+    private final class AnsiSyntaxHighlightIntense {
+        public static final String BLACK	= "90";
+        public static final String RED	    = "91";
+        public static final String GREEN	= "92";
+        public static final String YELLOW	= "93";
+        public static final String BLUE	    = "94";
+        public static final String PURPLE	= "95";
+        public static final String CYAN	    = "96";
+        public static final String WHITE	= "97";
     }
 }

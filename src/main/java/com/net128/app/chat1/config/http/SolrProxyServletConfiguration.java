@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 import javax.inject.Inject;
 
 @Configuration
-@Profile("dev")
+@Profile("local")
 public class SolrProxyServletConfiguration {
     @Inject
     private SolrProxyConfig solrProxyConfig;

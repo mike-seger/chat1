@@ -16,7 +16,7 @@ import java.util.List;
 
 @Configuration
 @ConfigurationProperties(prefix = "tcptunnel")
-@Profile("dev")
+@Profile("local")
 public class TcpTunnelConfig {
     private final static Logger logger = LoggerFactory.getLogger(TcpTunnelConfig.class);
 
