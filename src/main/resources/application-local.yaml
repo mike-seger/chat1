@@ -31,9 +31,6 @@ hibernate:
 #                    filter:
 #                        CommonsRequestLoggingFilter: trace
 logging.level.org.springframework.boot.autoconfigure.security.servlet: info
-open:
-    endpoint:
-        uris: /hrrs, /hrrs/**
 swagger:
     uris: /v2/api-docs,/configuration/**,/swagger.yml,/swagger-ui.html,/swagger-ui.html#**,/webjars/**,/swagger-resources/**
 tcptunnel:
@@ -45,8 +42,8 @@ tcptunnel:
         remoteHost: localhost
         remotePort: 18090
     -   port: 18093
-        remoteHost: www.switch.ch
-        remotePort: 80
+        remoteHost: localhost
+        remotePort: 18090
 proxy:
     solr:
         logging-enabled: false

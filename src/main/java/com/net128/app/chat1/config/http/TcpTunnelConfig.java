@@ -27,15 +27,24 @@ public class TcpTunnelConfig {
 
     @PostConstruct
     private void init() {
-        for(Tunnel tunnel : tunnels) {
-            Params params = new Params(tunnel.getPort(), tunnel.getRemoteHost(), tunnel.getRemotePort());
-            if (enabled) {
+        if (enabled) {
+            for (Tunnel tunnel : tunnels) {
+                Params params = new Params(tunnel.getPort(), tunnel.getRemoteHost(), tunnel.getRemotePort()) {
+                    public List<TCPObserver> createDownObservers(String sourceAddr) {
+                        List<TCPObserver> result=super.createDownObservers(sourceAddr);
+                        result.add(new TcpDumpLogger("Response"));
+                        return result;
+                    }
+                    public List<TCPObserver> createUpObservers(String sourceAddr) {
+                        List<TCPObserver> result=super.createUpObservers(sourceAddr);
+                        result.add(new TcpDumpLogger("Request"));
+                        return result;
+                    }
+                };
                 params.setBufferSize(bufferSize);
-                params.getUpObservers().add(new TcpDumpLogger("Request"));
-                params.getDownObservers().add(new TcpDumpLogger("Response"));
+                Main main = new Main(params);
+                main.start();
             }
-            Main main = new Main(params);
-            main.start();
         }
     }
 

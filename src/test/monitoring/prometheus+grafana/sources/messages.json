@@ -1,0 +1,14 @@
+{
+    "orgId": 1,
+    "name": "Messages",
+    "type": "prometheus",
+    "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+    "xxaccess": "proxy",
+    "url": "http://localhost:18090/actuator/prometheus",
+    "password": "",
+    "user": "",
+    "database": "",
+    "basicAuth": false,
+    "isDefault": true,
+    "jsonData": {}
+}

@@ -4,9 +4,16 @@ spring:
     autoconfigure:
         exclude: ''
     datasource:
+#        type: com.zaxxer.hikari.HikariDataSource
+#        hikari:
+#            connection-test-query: SELECT 1 FROM DUAL
+#            minimum-idle: 1000
+#            maximum-pool-size: 1000
+#            pool-name: dbconnpool
+#            auto-commit: false
         password: ''
         username: sa
-        url: jdbc:h2:mem:chat1-perftest;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE
+        url: jdbc:h2:mem:chat1-perftest;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000
 #        url: jdbc:h2:~/h2/chat1-perftest;MODE=MySQL;DB_CLOSE_ON_EXIT=TRUE
     jpa.hibernate.ddl-auto: create-drop
 hibernate:

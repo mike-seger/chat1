@@ -69,5 +69,9 @@ spring:
             org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration,
             org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,
             org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-
+management.endpoints.enabled-by-default: true
+management.endpoints.web.exposure.include: '*'
+open:
+    endpoint:
+        uris: /hrrs, /hrrs/**, /actuator/**
 
