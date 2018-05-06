@@ -6,7 +6,8 @@ spring:
     datasource:
         password: ''
         username: sa
-        url: jdbc:h2:~/h2/chat1-test;MODE=MySQL;DB_CLOSE_ON_EXIT=TRUE
+        url: jdbc:h2:mem:chat1-perftest;MODE=MySQL;DB_CLOSE_ON_EXIT=TRUE
+#        url: jdbc:h2:~/h2/chat1-perftest;MODE=MySQL;DB_CLOSE_ON_EXIT=TRUE
     jpa.hibernate.ddl-auto: create
 hibernate:
     dialect: org.hibernate.dialect.H2Dialect
