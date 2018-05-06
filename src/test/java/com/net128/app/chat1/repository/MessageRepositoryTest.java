@@ -31,7 +31,7 @@ public class MessageRepositoryTest implements CommonSpringTest {
     @Test
     public void testSaveMessage() {
         Message message=repository.save(newMessage());
-        assertNotNull(repository.findOne(message.getId()));
+        assertNotNull(repository.getOne(message.getId()));
     }
 
     @Test

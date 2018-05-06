@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import java.util.Random;
 
 @RestController
-@Profile("local")
+@Profile({"local", "perftest"})
 public class MessageDevController {
     @Inject
     private MessageService messageService;

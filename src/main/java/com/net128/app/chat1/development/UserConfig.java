@@ -9,7 +9,7 @@ import java.util.List;
 
 @Configuration
 @ConfigurationProperties(prefix = "chat1.userconfig")
-@Profile({"local", "test"})
+@Profile({"local", "test", "perftest"})
 public class UserConfig {
     public static class User implements JsonObject<UserConfig> {
         private String name;

@@ -1,0 +1,18 @@
+server:
+    port: 20090
+spring:
+    autoconfigure:
+        exclude: ''
+    datasource:
+        password: ''
+        username: sa
+        url: jdbc:h2:~/h2/chat1-test;MODE=MySQL;DB_CLOSE_ON_EXIT=TRUE
+    jpa.hibernate.ddl-auto: create
+hibernate:
+    dialect: org.hibernate.dialect.H2Dialect
+chat1:
+    userconfig:
+        users:
+        -   name: user
+            password: password
+            role: USER

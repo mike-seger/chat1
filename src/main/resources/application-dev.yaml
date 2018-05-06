@@ -3,7 +3,6 @@ server:
 spring:
     autoconfigure:
         exclude: >
-            com.github.mkopylec.charon.configuration.CharonConfiguration,
             org.springframework.cloud.netflix.zuul.ZuulProxyAutoConfiguration,
             org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration,
     datasource:
@@ -12,3 +11,4 @@ spring:
         url: jdbc:h2:~/h2/chat1;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE
 hibernate:
     dialect: org.hibernate.dialect.H2Dialect
+

@@ -14,7 +14,7 @@ import javax.inject.Inject;
 
 @Configuration
 @EnableWebSecurity
-@Profile({"local", "test"})
+@Profile({"local", "test", "perftest"})
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${swagger.uris:}")
     private String [] swaggerUris;
@@ -46,7 +46,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         InMemoryUserDetailsManagerConfigurer conf=auth.inMemoryAuthentication();
         for(UserConfig.User user : userConfig.getUsers()) {
-            conf.withUser(user.getName()).password(user.getPassword()).roles(user.getRoles());
+            conf.withUser(user.getName()).password("{noop}"+user.getPassword()).roles(user.getRoles());
         }
     }
 }

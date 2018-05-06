@@ -8,9 +8,6 @@ hibernate:
 logging:
     level:
         com:
-            github:
-                mkopylec:
-                    charon: warn
             netflix: warn
             netflix.config.sources.URLConfigurationSource: error
             net128.app.chat1: warn
@@ -19,6 +16,7 @@ logging:
                 PropertiesDumper: debug
             net128.app.chat1.servlet: debug
             net128.app.chat1.Chat1Application: warn
+            zaxxer.hikari.HikariDataSource: warn
         org:
             apache:
                 catalina: warn
@@ -28,10 +26,14 @@ logging:
             springframework.jmx.export.annotation.AnnotationMBeanExporter: error
             springframework.boot:
                 context.embedded.tomcat.TomcatEmbeddedServletContainer: info
+                web.embedded.undertow: info
+                web.embedded.tomcat: info
+                web.embedded.jetty: info
             reflections: warn
         springfox: warn
 server:
-    context-path: /${spring.application.name}
+#    max-http-post-size: 104857600
+    maxPostSize: 104857600
     servlet:
         context-path: ''
 spring:
@@ -43,7 +45,7 @@ spring:
         use-hal-as-default-json-media-type: false
     h2.console.enabled: false
     Multipart: &multipart
-        max-file-size: 104857600
+        max-file-size: '${server.maxPostSize}'
         max-request-size: '${spring.Multipart.max-file-size}'
     http:
         <<: *multipart
@@ -54,12 +56,13 @@ spring:
         serialization:
             WRITE_DATES_AS_TIMESTAMPS: false
             fail-on-empty-beans: false
+    jpa:
+        open-in-view: false
     output:
         ansi:
             enabled: detect
     autoconfigure:
         exclude: >
-            com.github.mkopylec.charon.configuration.CharonConfiguration,
             org.springframework.cloud.netflix.zuul.ZuulProxyAutoConfiguration,
             org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration.
             org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration,

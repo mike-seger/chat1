@@ -1,5 +1,4 @@
 server:
-    context-path: ''
     port: 18090
 spring:
     autoconfigure:
@@ -31,7 +30,7 @@ hibernate:
 #                web:
 #                    filter:
 #                        CommonsRequestLoggingFilter: trace
-
+logging.level.org.springframework.boot.autoconfigure.security.servlet: info
 open:
     endpoint:
         uris: /hrrs, /hrrs/**
@@ -48,20 +47,10 @@ tcptunnel:
     -   port: 18093
         remoteHost: www.switch.ch
         remotePort: 80
-charon:
-    mappings:
-    -   destinations: http://localhost:18092/
-        name: charon sample 0
-        path: /charon0/
-    -   destinations: http://localhost:18092/
-        name: charon sample 1
-        path: /charon1/
-    tracing:
-        enabled: false
 proxy:
     solr:
         logging-enabled: false
-        proxy-path: ${server.context-path}/solr/*
+        proxy-path: ${server.servlet.context-path}/solr/*
         target-url: http://localhost:${server.port}/
 zuul:
     debug:

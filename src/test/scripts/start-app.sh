@@ -16,15 +16,15 @@ sudo sysctl -w kern.maxfiles=25000 >/dev/null
 sudo sysctl -w kern.maxfilesperproc=24500 >/dev/null
 sudo sysctl -w kern.ipc.somaxconn=20000 >/dev/null
 ulimit -S -n 20000 >/dev/null
-mvn spring-boot:run \
-    -Drun.jvmArguments="
-        -Dserver.port=$port
-        -Dspring.datasource.url=jdbc:h2:~/h2/chat1-test;MODE=MySQL;DB_CLOSE_ON_EXIT=TRUE
-        -Dspring.jpa.hibernate.ddl-auto=create
-     " \
-    >/tmp/out.log &
+mvn spring-boot:run -Dspring-boot.run.profiles='perftest' >/tmp/out.log &
+pid=$!
+echo "server running under pid $pid"
 
-trap 'kill $(jobs -p)' EXIT
+function finish {
+    kill $pid $(jobs -p)
+}
+
+trap finish EXIT
 
 echo " "
 echo "-------------------------------------------------------------"
@@ -38,8 +38,11 @@ curl -s --connect-timeout 1 \
     --retry-delay 1 \
     --retry-max-time 17 \
     "$endpoint" 2>&1>/dev/null
+echo "stage 1 $endpoint"
 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' '"$endpoint"')" != "200" ]]; do sleep 0.5; done'
+echo "stage 2 $endpoint"
 curl -s $baseurl/generate/100 >/dev/null
+echo "stage 3 $endpoint"
 
 echo -n "Application started: "
 date -u +"%Y-%m-%dT%H:%M:%SZ"

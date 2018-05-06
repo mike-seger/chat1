@@ -31,22 +31,20 @@ public interface MessageRepository extends JpaRepository<Message, String> {
         LocalDateTime sent=null;
         Message message=null;
         if(pageable==null) {
-            pageable = new PageRequest(0, Integer.MAX_VALUE, getSort(startMessageId, sentBefore));
+            pageable = PageRequest.of(0, Integer.MAX_VALUE, getSort(startMessageId, sentBefore));
         }
         if(startMessageId!=null) {
             message=getOne(startMessageId);
         }
         if(message!=null) {
             sent=message.getSent();
-        } else {
-            startMessageId=null;
         }
         return findByUserIdSentAroundMessageId(userId, startMessageId, sent, sentBefore, pageable);
     }
 
     default Page<Message> findByUserIdAroundMessageId(
             String userId, String startMessageId, boolean sentBefore, int nMax) {
-        Pageable pageable = new PageRequest(0, nMax, getSort(startMessageId, sentBefore));
+        Pageable pageable = PageRequest.of(0, nMax, getSort(startMessageId, sentBefore));
         return findByUserIdAroundMessageId(userId, startMessageId, sentBefore, pageable);
     }
 
@@ -58,15 +56,9 @@ public interface MessageRepository extends JpaRepository<Message, String> {
     default Sort getSort(String startMessageId, boolean sentBefore){
         Sort sort;
         if(sentBefore || startMessageId==null) {
-            sort = new Sort(
-                new Sort.Order(Sort.Direction.DESC, "sent"),
-                new Sort.Order(Sort.Direction.DESC, "id")
-            );
+            sort = new Sort(Sort.Direction.DESC, "sent", "id");
         } else {
-            sort = new Sort(
-                new Sort.Order(Sort.Direction.ASC, "sent"),
-                new Sort.Order(Sort.Direction.ASC, "id")
-            );
+            sort = new Sort(Sort.Direction.ASC, "sent", "id");
         }
         return sort;
     }

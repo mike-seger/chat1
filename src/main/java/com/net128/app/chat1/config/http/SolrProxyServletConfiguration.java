@@ -16,8 +16,8 @@ public class SolrProxyServletConfiguration {
     private SolrProxyConfig solrProxyConfig;
 
     @Bean
-    public ServletRegistrationBean servletRegistrationBean() {
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new ProxyServlet(), solrProxyConfig.proxyPath);
+    public ServletRegistrationBean<ProxyServlet> servletRegistrationBean() {
+        ServletRegistrationBean<ProxyServlet> servletRegistrationBean = new ServletRegistrationBean<>(new ProxyServlet(), solrProxyConfig.proxyPath);
         servletRegistrationBean.addInitParameter("targetUri", solrProxyConfig.targetUrl);
         servletRegistrationBean.addInitParameter(ProxyServlet.P_LOG, solrProxyConfig.loggingEnabled+"");
         return servletRegistrationBean;

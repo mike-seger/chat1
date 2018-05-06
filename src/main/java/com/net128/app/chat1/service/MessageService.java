@@ -55,7 +55,7 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public Message getMessage(String messageId) {
-        Message message = repository.findOne(messageId);
+        Message message = repository.getOne(messageId);
         return message;
     }
 
@@ -65,7 +65,7 @@ public class MessageService {
     }
 
     public Message attach(String messageId, Attachment attachment) {
-        Message message = repository.findOne(messageId);
+        Message message = repository.getOne(messageId);
         if(message==null) {
             return null;
         }
@@ -89,7 +89,7 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public void streamAttachment(String messageId, OutputStream outputStream) throws IOException {
-        Pageable singleResult = new PageRequest(0, 1);
+        Pageable singleResult = PageRequest.of(0, 1);
         List<Attachment> attachments=attachmentRepository.findByMessage(repository.getOne(messageId), singleResult).getContent();
         if(attachments.size()>0) {
             try (InputStream is = new ByteArrayInputStream(attachments.get(0).getData())) {
