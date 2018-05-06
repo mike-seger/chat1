@@ -24,6 +24,7 @@ logging:
             hibernate.type.descriptor.sql: warn
             springframework: warn
             springframework.jmx.export.annotation.AnnotationMBeanExporter: error
+            springframework.beans.factory.support.DisposableBeanAdapter: error
             springframework.boot:
                 context.embedded.tomcat.TomcatEmbeddedServletContainer: info
                 web.embedded.undertow: info
