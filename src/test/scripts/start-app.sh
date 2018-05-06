@@ -22,6 +22,7 @@ case "${unameOut}" in
 esac
 echo ${machine}
 
+curlopts="--retry-connrefused"
 if [ $os == Mac ] ; then
     sudo sysctl -w kern.maxfiles=25000 >/dev/null
     sudo sysctl -w kern.maxfilesperproc=24500 >/dev/null
@@ -46,9 +47,8 @@ echo "-------------------------------------------------------------"
 echo ""
 echo "Starting Application on $endpoint ..."
 
-curl -s --connect-timeout 1 \
+curl -s --connect-timeout 1 $curlopts \
     --max-time 1 \
-    --retry-connrefused \
     --retry 10 \
     --retry-delay 1 \
     --retry-max-time 17 \
