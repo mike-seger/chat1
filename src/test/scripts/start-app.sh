@@ -22,8 +22,9 @@ case "${unameOut}" in
 esac
 echo ${machine}
 
-curlopts="--retry-connrefused"
+curlopts=""
 if [ $os == Mac ] ; then
+    curlopts="--retry-connrefused"
     sudo sysctl -w kern.maxfiles=25000 >/dev/null
     sudo sysctl -w kern.maxfilesperproc=24500 >/dev/null
     sudo sysctl -w kern.ipc.somaxconn=20000 >/dev/null
