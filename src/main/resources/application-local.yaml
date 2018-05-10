@@ -49,20 +49,6 @@ proxy:
         logging-enabled: false
         proxy-path: ${server.servlet.context-path}/solr/*
         target-url: http://localhost:${server.port}/
-zuul:
-    debug:
-        request: true
-    forceOriginalQueryStringEncoding: true
-    include-debug-header: true
-    routes:
-        zuul1:
-            path: /zuul1/**
-            sensitiveHeaders: ''
-            url: http://localhost:18092
-        zuul2:
-            path: /zuul2/**
-            sensitiveHeaders: ''
-            url: http://localhost:18092
 littleproxy:
     enabled: false
     request:

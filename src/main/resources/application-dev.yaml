@@ -2,9 +2,7 @@ server:
     context-path: ''
 spring:
     autoconfigure:
-        exclude: >
-            org.springframework.cloud.netflix.zuul.ZuulProxyAutoConfiguration,
-            org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration,
+        exclude: ''
     datasource:
         password: ''
         username: sa

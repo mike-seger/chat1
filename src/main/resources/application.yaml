@@ -64,8 +64,6 @@ spring:
             enabled: detect
     autoconfigure:
         exclude: >
-            org.springframework.cloud.netflix.zuul.ZuulProxyAutoConfiguration,
-            org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration.
             org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration,
             org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration,
             org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration

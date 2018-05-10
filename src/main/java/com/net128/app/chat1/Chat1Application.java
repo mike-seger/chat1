@@ -9,7 +9,6 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 @EntityScan(
     basePackageClasses = { Chat1Application.class, Jsr310JpaConverters.class }
 )
-//@EnableZuulProxy
 @SpringBootApplication
 @EnableCaching
 public class Chat1Application {

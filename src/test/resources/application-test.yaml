@@ -12,9 +12,7 @@ logging:
             hibernate.jpa.internal.EntityManagerFactoryRegistry: error
 spring:
     autoconfigure:
-        exclude: >
-            org.springframework.cloud.netflix.zuul.ZuulProxyAutoConfiguration,
-            org.springframework.cloud.netflix.archaius.ArchaiusAutoConfiguration
+        exclude: ''
     datasource:
         url: jdbc:h2:mem:chat1;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE
         jpa:
